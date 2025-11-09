@@ -6,8 +6,10 @@ import {
   UpdateDateColumn,
   BeforeInsert,
   BeforeUpdate,
+  OneToMany,
 } from 'typeorm';
 import { IsEmail, IsNotEmpty, MinLength } from 'class-validator';
+import { Inscripcion } from 'src/inscripcion/entities/inscripcion.entity';
 
 @Entity({
   name: 'users',
@@ -90,4 +92,7 @@ export class User {
     name: 'address',
   })
   address: string;
+
+  @OneToMany(() => Inscripcion, (inscripcion) => inscripcion.user)
+  inscripcion: Inscripcion[];
 }
