@@ -28,4 +28,12 @@ export class CreateUserDto {
       'The password must have a Uppercase, lowercase letter and a number',
   })
   password: string;
+
+  @IsString()
+  @IsNotEmpty()
+  telephone: string;
+
+  @IsString()
+  @IsNotEmpty()
+  address: string;
 }

@@ -78,4 +78,16 @@ export class User {
   emailToLowerCaseOnUpdate() {
     this.emailToLowerCase();
   }
+
+  @Column('text', {
+    nullable: true,
+    name: 'telephone',
+  })
+  telephone: string;
+
+  @Column('text', {
+    nullable: true,
+    name: 'address',
+  })
+  address: string;
 }
