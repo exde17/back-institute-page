@@ -27,6 +27,18 @@ export class InscripcionService {
 
     try {
       console.log('Creando inscripcion para el usuario:', user.id);
+      // Verificar si ya existe una inscripción con ese usuario y programa
+      const inscripcionExistente = await queryRunner.manager.findOne(Inscripcion, {
+        where: { 
+          user: { id: user.id },
+          programa: { id: createInscripcionDto.programa.id }
+        },
+      });
+
+      if (inscripcionExistente) {
+        throw new Error('Ya existe una inscripción para este usuario en este programa');
+      }
+
       const inscripcion = queryRunner.manager.create(Inscripcion, {
         ...createInscripcionDto,
         user: { id: user.id }
