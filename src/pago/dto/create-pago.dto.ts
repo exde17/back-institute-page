@@ -4,9 +4,11 @@ import { Inscripcion } from "src/inscripcion/entities/inscripcion.entity";
 
 export class CreatePagoDto {
     @IsDecimal()
+    @IsOptional()
     monto: number;
 
     @IsEnum(MetodoPago)
+    @IsOptional()
     metodo: MetodoPago;
 
     @IsOptional()

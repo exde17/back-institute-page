@@ -8,12 +8,20 @@ export enum MetodoPago {
   EFECTIVO = 'Efectivo',
 }
 
+export enum EstadoPago {
+  PENDIENTE = 'Pendiente',
+  COMPLETADO = 'Completado',
+  FALLIDO = 'Fallido',
+  PARCIAL = 'Parcial',
+}
+
 @Entity()
 export class Pago {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column('decimal', {
+    nullable: true,
     precision: 10,
     scale: 2,
   })
@@ -21,6 +29,7 @@ export class Pago {
 
   @Column('enum', {
     enum: MetodoPago,
+    nullable: true,
   })
   metodo: MetodoPago;
 
@@ -62,4 +71,10 @@ export class Pago {
         nullable: true,
     })
     raw_response: string;
+
+    @Column('enum', {
+        enum: EstadoPago,
+        default: EstadoPago.PENDIENTE,
+    })
+    estado: EstadoPago;
 }
