@@ -7,6 +7,7 @@ import { Repository, DataSource } from 'typeorm';
 import { Pago } from 'src/pago/entities/pago.entity';
 import { Programa } from 'src/programas/entities/programa.entity';
 import { User } from '../user/entities/user.entity';
+import { MailService } from 'src/mail/mail.service';
 
 @Injectable()
 export class InscripcionService {
@@ -18,6 +19,7 @@ export class InscripcionService {
     @InjectRepository(Programa)
     private readonly programaRepository: Repository<Programa>,
     private readonly dataSource: DataSource,
+    private readonly mailService: MailService,
   ){}
 
   async create(user: User, createInscripcionDto: CreateInscripcionDto) {
@@ -67,6 +69,25 @@ export class InscripcionService {
       await queryRunner.manager.save(Pago, pagoInicial);
 
       await queryRunner.commitTransaction();
+      
+      // Enviar correo de confirmación después de que la transacción sea exitosa
+      await this.mailService.sendInscripcionConfirmation(
+        user.email,
+        `${user.firstName} ${user.lastName}`,
+        {
+          nombre: programa.nombre,
+          descripcion: programa.descripcion,
+          costo: programa.costo,
+          duracion: `${programa.duracion} semestres`,
+        },
+        {
+          nombre: 'FCM INSTITUTE',
+          direccion: 'Cra. 13B # 62A - 16, Montería-Córdoba',
+          telefono: '+(57) 302 4340389',
+          email: 'direccionn@fundacioncolombiamia.org',
+        }
+      );
+      
       return {
         message: 'Inscripcion creada exitosamente',
         inscripcion: {

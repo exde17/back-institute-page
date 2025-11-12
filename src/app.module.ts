@@ -6,6 +6,7 @@ import { ProgramasModule } from './programas/programas.module';
 import { NoticiasModule } from './noticias/noticias.module';
 import { InscripcionModule } from './inscripcion/inscripcion.module';
 import { PagoModule } from './pago/pago.module';
+import { MailModule } from './mail/mail.module';
 
 
 @Module({
@@ -31,6 +32,7 @@ import { PagoModule } from './pago/pago.module';
     NoticiasModule,
     InscripcionModule,
     PagoModule,
+    MailModule,
   ],
 })
 export class AppModule {}
