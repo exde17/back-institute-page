@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { CreateInscripcionDto } from './dto/create-inscripcion.dto';
 import { UpdateInscripcionDto } from './dto/update-inscripcion.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -27,31 +27,35 @@ export class InscripcionService {
 
     try {
       console.log('Creando inscripcion para el usuario:', user.id);
+      console.log('Programa ID:', createInscripcionDto.programa);
+      
       // Verificar si ya existe una inscripción con ese usuario y programa
-      const inscripcionExistente = await queryRunner.manager.findOne(Inscripcion, {
-        where: { 
-          user: { id: user.id },
-          programa: { id: createInscripcionDto.programa.id }
-        },
-      });
-
+      const inscripcionExistente = await queryRunner.manager
+        .createQueryBuilder(Inscripcion, 'inscripcion')
+        .where('inscripcion.userId = :userId', { userId: user.id })
+        .andWhere('inscripcion.programaId = :programaId', { programaId: createInscripcionDto.programa })
+        .getOne();
+      
+      console.log('Inscripción existente encontrada:', inscripcionExistente);
+          
       if (inscripcionExistente) {
-        throw new Error('Ya existe una inscripción para este usuario en este programa');
+        throw new HttpException('Ya existe una inscripción para este usuario en este programa', HttpStatus.CONFLICT);
       }
 
       const inscripcion = queryRunner.manager.create(Inscripcion, {
-        ...createInscripcionDto,
-        user: { id: user.id }
+        observacion: createInscripcionDto.observacion,
+        user: { id: user.id },
+        programa: { id: createInscripcionDto.programa }
       });
       await queryRunner.manager.save(Inscripcion, inscripcion);
       
       // buscar el valor del programa para ponerlo en pago inicial
       const programa = await queryRunner.manager.findOne(Programa, {
-        where: { id: createInscripcionDto.programa.id },
+        where: { id: createInscripcionDto.programa },
       });
 
       if (!programa) {
-        throw new Error('Programa not found');
+        throw new HttpException('Programa no encontrado', HttpStatus.NOT_FOUND);
       }
 
       // crear un pago inicial asociado a la inscripcion
@@ -63,12 +67,26 @@ export class InscripcionService {
       await queryRunner.manager.save(Pago, pagoInicial);
 
       await queryRunner.commitTransaction();
-      return 'Inscripcion creada exitosamente';
+      return {
+        message: 'Inscripcion creada exitosamente',
+        inscripcion: {
+          id: inscripcion.id,
+          programa: programa.nombre,
+          fechaInscripcion: inscripcion.fechaInscripcion,
+        }
+      };
       
     } catch (error) {
       await queryRunner.rollbackTransaction();
       console.error(error);
-      throw new Error('Error creating inscripcion');
+      
+      // Re-lanzar HttpException para que llegue al frontend con el mensaje correcto
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      
+      // Para cualquier otro error, lanzar un error genérico
+      throw new HttpException('Error al crear la inscripción', HttpStatus.INTERNAL_SERVER_ERROR);
     } finally {
       await queryRunner.release();
     }
@@ -99,7 +117,15 @@ export class InscripcionService {
 
   async update(id: string, updateInscripcionDto: UpdateInscripcionDto) {
     try {
-      await this.inscripcionRepository.update(id, updateInscripcionDto);
+      const updateData: any = {
+        observacion: updateInscripcionDto.observacion,
+      };
+      
+      if (updateInscripcionDto.programa) {
+        updateData.programa = { id: updateInscripcionDto.programa };
+      }
+      
+      await this.inscripcionRepository.update(id, updateData);
       return `This action updates a #${id} inscripcion`;
     } catch (error) {
       console.error(error);

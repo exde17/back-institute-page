@@ -9,7 +9,10 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const status = exception.getStatus();
     const exceptionResponse: any = exception.getResponse();
 
-    let message = exceptionResponse.message;
+    // Si exceptionResponse es un string, usarlo directamente como mensaje
+    let message = typeof exceptionResponse === 'string' 
+      ? exceptionResponse 
+      : exceptionResponse.message;
 
     // Personaliza los mensajes de error aquí
     if (Array.isArray(message)) {
@@ -28,8 +31,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
     response
       .status(status)
       .json({
-        // statusCode: status,
-        // error: exceptionResponse.error,
+        statusCode: status,
         message,
       });
   }
