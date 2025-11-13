@@ -46,7 +46,7 @@ export class UserService {
 
       const user = await this.userRepository.findOne({ 
         where: { email },
-        select: ['email', 'password', 'id'],
+        select: ['email', 'password', 'id', 'role'],
        });
 
        if (!user){
