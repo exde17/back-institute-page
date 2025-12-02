@@ -50,6 +50,8 @@ export class UserController {
       user: user,
       email: email,
       rawHeaders: rawHeaders,
+      firstName: user.firstName,
+      lastName: user.lastName,
     };
   }
 
