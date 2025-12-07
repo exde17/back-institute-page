@@ -1,0 +1,1717 @@
+{
+  "info": {
+    "name": "Colombia Mía - Instituto API",
+    "description": "Colección completa de endpoints para la API del Instituto Colombia Mía",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"Juan\",\n  \"lastName\": \"Pérez\",\n  \"tipoDocumento\": { \"id\": 1 },\n  \"documentNumber\": \"1234567890\",\n  \"lugarExpedicion\": { \"id\": 1 },\n  \"birthDate\": \"1990-01-01\",\n  \"nationality\": \"Colombiano\",\n  \"municipioNacimiento\": { \"id\": 1 },\n  \"departamentoNacimiento\": { \"id\": 1 },\n  \"barrio\": \"Centro\",\n  \"email\": \"juan@example.com\",\n  \"password\": \"Password123!\",\n  \"telephone\": \"3001234567\",\n  \"address\": \"Calle 1 #1-1\",\n  \"nombreAcudiente\": \"María Pérez\",\n  \"numeroContactoAcudiente\": \"3009876543\",\n  \"parentesco\": { \"id\": 1 },\n  \"direccionAcudiente\": \"Calle 2 #4-5\",\n  \"nivelEducativo\": { \"id\": 1 },\n  \"anioCertificacion\": \"2020\",\n  \"institucionEducativa\": \"Colegio Nacional\",\n  \"departamentoInstitucion\": { \"id\": 1 },\n  \"municipioInstitucion\": { \"id\": 1 },\n  \"limitacionFisicaCognitiva\": false,\n  \"descripcionLimitacion\": null,\n  \"grupo\": { \"id\": 1 },\n  \"categoriaEstudiante\": { \"id\": 1 },\n  \"estadoEstudiante\": { \"id\": 1 }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/register",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "register"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"juan@example.com\",\n  \"password\": \"Password123!\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Current User",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get User by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update User",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"Juan Actualizado\",\n  \"telephone\": \"3009999999\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete User",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Private Route",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/private",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "private"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Private Route 3",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/private3",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "private3"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Tipo Documento",
+      "item": [
+        {
+          "name": "Create",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Cédula de Ciudadanía\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/tipo-documento",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "tipo-documento"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get All",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/tipo-documento",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "tipo-documento"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get by ID",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/tipo-documento/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "tipo-documento",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Cédula de Ciudadanía Actualizada\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/tipo-documento/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "tipo-documento",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/tipo-documento/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "tipo-documento",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Departamento",
+      "item": [
+        {
+          "name": "Create",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Cundinamarca\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/departamento",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "departamento"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get All",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/departamento",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "departamento"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get by ID",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/departamento/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "departamento",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Cundinamarca Actualizado\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/departamento/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "departamento",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/departamento/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "departamento",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Municipio",
+      "item": [
+        {
+          "name": "Create",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Bogotá\",\n  \"departamentoId\": 1\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/municipio",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "municipio"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get All",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/municipio",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "municipio"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get by ID",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/municipio/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "municipio",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Bogotá Actualizado\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/municipio/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "municipio",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/municipio/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "municipio",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Nivel Educativo",
+      "item": [
+        {
+          "name": "Create",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Primaria\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/nivel-educativo",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "nivel-educativo"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get All",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/nivel-educativo",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "nivel-educativo"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get by ID",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/nivel-educativo/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "nivel-educativo",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Primaria Actualizado\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/nivel-educativo/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "nivel-educativo",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/nivel-educativo/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "nivel-educativo",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Grupos",
+      "item": [
+        {
+          "name": "Create",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Grupo A\",\n  \"descripcion\": \"Primer grupo de estudiantes\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/grupos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "grupos"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get All",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/grupos",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "grupos"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get by ID",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/grupos/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "grupos",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Grupo A Actualizado\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/grupos/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "grupos",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/grupos/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "grupos",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Parentesco",
+      "item": [
+        {
+          "name": "Create",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Padre\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/parentesco",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "parentesco"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get All",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/parentesco",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "parentesco"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get by ID",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/parentesco/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "parentesco",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Padre Actualizado\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/parentesco/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "parentesco",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/parentesco/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "parentesco",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Categoría Estudiante",
+      "item": [
+        {
+          "name": "Create",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Categoría A\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/categoria-estudiante",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "categoria-estudiante"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get All",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/categoria-estudiante",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "categoria-estudiante"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get by ID",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/categoria-estudiante/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "categoria-estudiante",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Categoría A Actualizada\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/categoria-estudiante/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "categoria-estudiante",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/categoria-estudiante/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "categoria-estudiante",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Estado Estudiante",
+      "item": [
+        {
+          "name": "Create",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Activo\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/estado-estudiante",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "estado-estudiante"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get All",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/estado-estudiante",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "estado-estudiante"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get by ID",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/estado-estudiante/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "estado-estudiante",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Activo Actualizado\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/estado-estudiante/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "estado-estudiante",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/estado-estudiante/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "estado-estudiante",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Inscripción",
+      "item": [
+        {
+          "name": "Create (Autenticado)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"programaId\": 1,\n  \"grupoId\": 1\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/inscripcion",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "inscripcion"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get All",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/inscripcion",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "inscripcion"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get by ID",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/inscripcion/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "inscripcion",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"grupoId\": 2\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/inscripcion/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "inscripcion",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/inscripcion/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "inscripcion",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Noticias",
+      "item": [
+        {
+          "name": "Create",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"titulo\": \"Nueva Noticia\",\n  \"contenido\": \"Contenido de la noticia\",\n  \"fechaPublicacion\": \"2025-12-07\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/noticias",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "noticias"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get All",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/noticias",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "noticias"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get by ID",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/noticias/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "noticias",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"titulo\": \"Noticia Actualizada\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/noticias/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "noticias",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/noticias/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "noticias",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Pago",
+      "item": [
+        {
+          "name": "Create",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"monto\": 150000,\n  \"descripcion\": \"Pago de matrícula\",\n  \"inscripcionId\": 1\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/pago",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "pago"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get All",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/pago",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "pago"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get by ID",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/pago/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "pago",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"monto\": 160000\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/pago/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "pago",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/pago/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "pago",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Programas (Autenticado)",
+      "item": [
+        {
+          "name": "Create",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Programa de Matemáticas\",\n  \"descripcion\": \"Programa especializado en matemáticas\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/programas",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "programas"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get All",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/programas",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "programas"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/programas/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "programas",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Programa de Matemáticas Avanzado\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/programas/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "programas",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/programas/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "programas",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    }
+  ]
+}

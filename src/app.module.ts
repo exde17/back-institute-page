@@ -7,6 +7,14 @@ import { NoticiasModule } from './noticias/noticias.module';
 import { InscripcionModule } from './inscripcion/inscripcion.module';
 import { PagoModule } from './pago/pago.module';
 import { MailModule } from './mail/mail.module';
+import { TipoDocumentoModule } from './tipo-documento/tipo-documento.module';
+import { DepartamentoModule } from './departamento/departamento.module';
+import { MunicipioModule } from './municipio/municipio.module';
+import { ParentescoModule } from './parentesco/parentesco.module';
+import { NivelEducativoModule } from './nivel-educativo/nivel-educativo.module';
+import { GruposModule } from './grupos/grupos.module';
+import { EstadoEstudianteModule } from './estado-estudiante/estado-estudiante.module';
+import { CategoriaEstudianteModule } from './categoria-estudiante/categoria-estudiante.module';
 
 
 @Module({
@@ -33,6 +41,14 @@ import { MailModule } from './mail/mail.module';
     InscripcionModule,
     PagoModule,
     MailModule,
+    TipoDocumentoModule,
+    DepartamentoModule,
+    MunicipioModule,
+    ParentescoModule,
+    NivelEducativoModule,
+    GruposModule,
+    EstadoEstudianteModule,
+    CategoriaEstudianteModule,
   ],
 })
 export class AppModule {}
