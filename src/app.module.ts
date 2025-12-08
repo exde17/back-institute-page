@@ -15,6 +15,7 @@ import { NivelEducativoModule } from './nivel-educativo/nivel-educativo.module';
 import { GruposModule } from './grupos/grupos.module';
 import { EstadoEstudianteModule } from './estado-estudiante/estado-estudiante.module';
 import { CategoriaEstudianteModule } from './categoria-estudiante/categoria-estudiante.module';
+import { MatriculaModule } from './matricula/matricula.module';
 
 
 @Module({
@@ -49,6 +50,7 @@ import { CategoriaEstudianteModule } from './categoria-estudiante/categoria-estu
     GruposModule,
     EstadoEstudianteModule,
     CategoriaEstudianteModule,
+    MatriculaModule,
   ],
 })
 export class AppModule {}

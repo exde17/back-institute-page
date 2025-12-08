@@ -19,6 +19,7 @@ import { NivelEducativo } from 'src/nivel-educativo/entities/nivel-educativo.ent
 import { Grupo } from 'src/grupos/entities/grupo.entity';
 import { CategoriaEstudiante } from 'src/categoria-estudiante/entities/categoria-estudiante.entity';
 import { EstadoEstudiante } from 'src/estado-estudiante/entities/estado-estudiante.entity';
+import { Matricula } from 'src/matricula/entities/matricula.entity';
 
 @Entity({
   name: 'users',
@@ -143,6 +144,9 @@ export class User {
 
   @OneToMany(() => Inscripcion, (inscripcion) => inscripcion.user)
   inscripcion: Inscripcion[];
+
+  @OneToMany(()=> Matricula, (matricula) => matricula.estudiante)
+  matriculas: Matricula[];
 
 // REFERENCIAS FAMILIARES
 // NOMBRE DEL ACUDIENTE:
