@@ -39,7 +39,8 @@ export class UserController {
   }
 
   @Get()
-  @UseGuards(AuthGuard(), UseRoleGuard)
+  // @UseGuards(AuthGuard(), UseRoleGuard)
+  @Auth(ValidRoles.superUser, ValidRoles.admin, ValidRoles.user)
   findAll(
     @GetUser() user: User,
     @GetUser('email') email: string,
@@ -58,7 +59,7 @@ export class UserController {
 
   @Get('private')
   // @SetMetadata('roles', ['admin', 'super-user'])
-  @RoleProtected()
+  @RoleProtected(ValidRoles.admin, ValidRoles.superUser)
   @UseGuards(AuthGuard(), UseRoleGuard)
   privateRoute(
     @GetUser() user: User,
