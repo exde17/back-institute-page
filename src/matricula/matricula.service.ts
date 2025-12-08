@@ -34,7 +34,7 @@ export class MatriculaService {
 
   async findOne(id: string) {
     const matricula = await this.matriculaRepository.findOne({
-      where: { id },
+      where: { estudiante: { id } },
       relations: ['estudiante'],
     });
 
