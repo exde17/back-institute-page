@@ -6,6 +6,11 @@ import { HttpExceptionFilter } from './utils/http-exception.filter';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const logger = new Logger('Boostrap');
+  
+  // Configurar límite de tamaño para multipart/form-data
+  app.use(require('express').json({ limit: '50mb' }));
+  app.use(require('express').urlencoded({ limit: '50mb', extended: true }));
+  
   app.enableCors({
     origin: ['http://localhost:4321', 'http://localhost:4320'], // Puertos comunes de Astro
     credentials: true,

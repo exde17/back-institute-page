@@ -1700,6 +1700,190 @@
           }
         }
       ]
+    },
+    {
+      "name": "Matrícula",
+      "item": [
+        {
+          "name": "Create Matrícula",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "estudianteId",
+                  "value": "550e8400-e29b-41d4-a716-446655440000",
+                  "type": "text"
+                },
+                {
+                  "key": "documentoEstudiante",
+                  "type": "file",
+                  "src": ""
+                },
+                {
+                  "key": "diplomaCertificadoGrado10",
+                  "type": "file",
+                  "src": ""
+                },
+                {
+                  "key": "documentoAcudiente",
+                  "type": "file",
+                  "src": ""
+                },
+                {
+                  "key": "formularioMatricula",
+                  "type": "file",
+                  "src": ""
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/matricula",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "matricula"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get All Matrículas",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/matricula",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "matricula"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Matrícula by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/matricula/550e8400-e29b-41d4-a716-446655440000",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "matricula",
+                "550e8400-e29b-41d4-a716-446655440000"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Matrícula",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "documentoEstudiante",
+                  "type": "file",
+                  "src": ""
+                },
+                {
+                  "key": "diplomaCertificadoGrado10",
+                  "type": "file",
+                  "src": ""
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/matricula/550e8400-e29b-41d4-a716-446655440000",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "matricula",
+                "550e8400-e29b-41d4-a716-446655440000"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete Matrícula",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/matricula/550e8400-e29b-41d4-a716-446655440000",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "matricula",
+                "550e8400-e29b-41d4-a716-446655440000"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Download File",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/matricula/archivo/uploads/matriculas/documentoEstudiante/documento.pdf",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "matricula",
+                "archivo",
+                "uploads",
+                "matriculas",
+                "documentoEstudiante",
+                "documento.pdf"
+              ]
+            }
+          }
+        }
+      ]
     }
   ],
   "variable": [
