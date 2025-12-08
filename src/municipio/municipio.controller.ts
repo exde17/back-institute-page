@@ -19,16 +19,16 @@ export class MunicipioController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.municipioService.findOne(+id);
+    return this.municipioService.findOne(id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateMunicipioDto: UpdateMunicipioDto) {
-    return this.municipioService.update(+id, updateMunicipioDto);
+    return this.municipioService.update(id, updateMunicipioDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.municipioService.remove(+id);
+    return this.municipioService.remove(id);
   }
 }

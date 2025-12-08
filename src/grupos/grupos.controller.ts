@@ -19,16 +19,16 @@ export class GruposController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.gruposService.findOne(+id);
+    return this.gruposService.findOne(id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateGrupoDto: UpdateGrupoDto) {
-    return this.gruposService.update(+id, updateGrupoDto);
+    return this.gruposService.update(id, updateGrupoDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.gruposService.remove(+id);
+    return this.gruposService.remove(id);
   }
 }

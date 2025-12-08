@@ -19,16 +19,16 @@ export class NivelEducativoController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.nivelEducativoService.findOne(+id);
+    return this.nivelEducativoService.findOne(id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateNivelEducativoDto: UpdateNivelEducativoDto) {
-    return this.nivelEducativoService.update(+id, updateNivelEducativoDto);
+    return this.nivelEducativoService.update(id, updateNivelEducativoDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.nivelEducativoService.remove(+id);
+    return this.nivelEducativoService.remove(id);
   }
 }

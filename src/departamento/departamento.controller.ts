@@ -19,16 +19,16 @@ export class DepartamentoController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.departamentoService.findOne(+id);
+    return this.departamentoService.findOne(id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateDepartamentoDto: UpdateDepartamentoDto) {
-    return this.departamentoService.update(+id, updateDepartamentoDto);
+    return this.departamentoService.update(id, updateDepartamentoDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.departamentoService.remove(+id);
+    return this.departamentoService.remove(id);
   }
 }

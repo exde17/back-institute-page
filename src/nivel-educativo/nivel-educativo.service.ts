@@ -1,26 +1,64 @@
 import { Injectable } from '@nestjs/common';
 import { CreateNivelEducativoDto } from './dto/create-nivel-educativo.dto';
 import { UpdateNivelEducativoDto } from './dto/update-nivel-educativo.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { NivelEducativo } from './entities/nivel-educativo.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class NivelEducativoService {
-  create(createNivelEducativoDto: CreateNivelEducativoDto) {
-    return 'This action adds a new nivelEducativo';
+  constructor(
+    @InjectRepository(NivelEducativo)
+    private nivelEducativoRepository: Repository<NivelEducativo>,
+  ) {}
+  async create(createNivelEducativoDto: CreateNivelEducativoDto) {
+    try {
+      const nivelEducativo = this.nivelEducativoRepository.create({ ...createNivelEducativoDto });
+      await this.nivelEducativoRepository.save(nivelEducativo);
+      return 'NivelEducativo created successfully';
+    } catch (error) {
+      console.error('Error creating nivelEducativo:', error);
+      return error;
+    }
   }
 
-  findAll() {
-    return `This action returns all nivelEducativo`;
+  async findAll() {
+    try {
+      const nivelesEducativos = await this.nivelEducativoRepository.find();
+      return nivelesEducativos;
+    } catch (error) {
+      console.error('Error finding nivelesEducativos:', error);
+      return error;
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} nivelEducativo`;
+  async findOne(id: string) {
+    try {
+      const nivelEducativo = await this.nivelEducativoRepository.findOneBy({ id });
+      return nivelEducativo;
+    } catch (error) {
+      console.error(`Error finding nivelEducativo with id ${id}:`, error);
+      return error;
+    }
   }
 
-  update(id: number, updateNivelEducativoDto: UpdateNivelEducativoDto) {
-    return `This action updates a #${id} nivelEducativo`;
+  async update(id: string, updateNivelEducativoDto: UpdateNivelEducativoDto) {
+    try {
+      await this.nivelEducativoRepository.update(id, updateNivelEducativoDto);
+      return `NivelEducativo with id ${id} updated successfully`;
+    } catch (error) {
+      console.error(`Error updating nivelEducativo with id ${id}:`, error);
+      return error;
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} nivelEducativo`;
+  async remove(id: string) {
+    try {
+      await this.nivelEducativoRepository.delete(id);
+      return `NivelEducativo with id ${id} removed successfully`;
+    } catch (error) {
+      console.error(`Error removing nivelEducativo with id ${id}:`, error);
+      return error;
+    }
   }
 }
