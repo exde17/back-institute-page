@@ -52,7 +52,7 @@ export class UserController {
       rawHeaders: rawHeaders,
       firstName: user.firstName,
       lastName: user.lastName,
-      role: user.role,
+      validRoles: user.role,
     };
   }
 
