@@ -1,4 +1,5 @@
 import { IsString, IsNotEmpty, IsOptional } from "class-validator";
+import { Inscripcion } from "src/inscripcion/entities/inscripcion.entity";
 
 export class CreateMatriculaDto {
   @IsString()
@@ -20,4 +21,8 @@ export class CreateMatriculaDto {
   @IsString()
   @IsOptional()
   formularioMatricula?: string;
+
+  @IsString()
+  @IsNotEmpty()
+  inscripcion: Inscripcion;
 }
