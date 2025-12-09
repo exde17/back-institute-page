@@ -77,7 +77,6 @@ export class InscripcionService {
         {
           nombre: programa.nombre,
           descripcion: programa.descripcion,
-          costo: programa.costo,
           duracion: `${programa.duracion} semestres`,
         },
         {
