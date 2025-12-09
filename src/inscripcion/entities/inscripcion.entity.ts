@@ -25,8 +25,8 @@ export class Inscripcion {
     @ManyToOne(() => User, (user) => user.inscripcion)
     user: User;
 
-    @OneToMany(() => Pago, (pago) => pago.inscripcion)
-    pagos: Pago[];
+    // @OneToMany(() => Pago, (pago) => pago.inscripcion)
+    // pagos: Pago[];
 
     // fecha de inscripcion
     @Column('timestamptz', {

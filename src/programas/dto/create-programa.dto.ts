@@ -1,4 +1,4 @@
-import { IsString, IsNumber, IsOptional } from 'class-validator';
+import { IsString, IsNumber, IsOptional, IsArray } from 'class-validator';
 
 export class CreateProgramaDto {
     @IsString()
@@ -34,12 +34,12 @@ export class CreateProgramaDto {
     @IsOptional()
     badgeColor: string;
 
-    @IsString()
+    @IsArray()
     @IsOptional()
-    semestres: string;
+    semestres: { nombre: string; asignaturas: string[] }[];
 
-    @IsString()
+    @IsArray()
     @IsOptional()
-    detalles: string;
+    detalles: string[];
     
 }
