@@ -13,5 +13,33 @@ export class CreateProgramaDto {
 
     @IsNumber()
     costo: number;
+
+    @IsString()
+    @IsOptional()
+    imagen: string;
+
+    @IsString()
+    @IsOptional()
+    modalidad: string;
+
+    @IsString()
+    @IsOptional()
+    categoria: string;
+
+    @IsString()
+    @IsOptional()
+    badge: string;
+
+    @IsString()
+    @IsOptional()
+    badgeColor: string;
+
+    @IsString()
+    @IsOptional()
+    semestres: string;
+
+    @IsString()
+    @IsOptional()
+    detalles: string;
     
 }
