@@ -1,3 +1,4 @@
+import { Matricula } from "src/matricula/entities/matricula.entity";
 import { Pago } from "src/pago/entities/pago.entity";
 import { Programa } from "src/programas/entities/programa.entity";
 import { User } from "src/user/entities/user.entity";
@@ -25,8 +26,8 @@ export class Inscripcion {
     @ManyToOne(() => User, (user) => user.inscripcion)
     user: User;
 
-    // @OneToMany(() => Pago, (pago) => pago.inscripcion)
-    // pagos: Pago[];
+    @OneToMany(()=> Matricula, (matricula) => matricula.inscripcion)
+    matriculas: Matricula[];
 
     // fecha de inscripcion
     @Column('timestamptz', {
