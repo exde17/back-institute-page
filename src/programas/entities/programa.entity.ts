@@ -10,9 +10,9 @@ export class Programa {
   nombre: string;
 
   @Column('text',{
-    nullable: false,
+    nullable: true,
   })
-  imagen: string;
+  imagen: string; 
 
   @Column()
   descripcion: string;
@@ -21,33 +21,39 @@ export class Programa {
   duracion: number;
 
   @Column('text',{
-    nullable: false,
+    nullable: true,
   })
   modalidad: string;
 
   @Column('text',{
-    nullable: false,
+    nullable: true,
   })
   categoria: string;
 
-  @Column()
+  @Column({
+    nullable: true,
+  })
   badge: string;
 
-  @Column()
+  @Column({
+    nullable: true,
+  })
   badgeColor: string;
 
   // semestres debe ser um array de objetos
-  @Column('jsonb')
+  @Column('jsonb',{
+    nullable: true,
+  })
   semestres: { nombre: string; asignaturas: string[] }[];
 
   // detalles debe ser un array de strings
-  @Column('text', { array: true })
+  @Column('text', { array: true, nullable: true })
   detalles: string[];
 
   @Column('decimal', {
     nullable: true,
   }
-  )
+)
   costo: number;
 
   @OneToMany(() => Inscripcion, (inscripcion) => inscripcion.programa)

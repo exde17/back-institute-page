@@ -1,5 +1,6 @@
+import { Pago } from "src/pago/entities/pago.entity";
 import { User } from "src/user/entities/user.entity";
-import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity()
 export class Matricula {
@@ -51,4 +52,7 @@ export class Matricula {
     name: 'updated_at',
   })
   updatedAt: Date;
+
+  @OneToMany(() => Pago, (pago) => pago.matricula)
+    pagos: Pago[];
 }

@@ -11,7 +11,6 @@ export class MailService {
     programData: {
       nombre: string;
       descripcion: string;
-      costo: number;
       duracion: string;
     },
     instituteInfo: {
@@ -24,13 +23,12 @@ export class MailService {
     try {
       await this.mailerService.sendMail({
         to: userEmail,
-        subject: '¡Inscripción Exitosa! - Confirmación de tu Programa',
+        subject: '¡Pre-inscripción Exitosa! - Confirmación de tu Programa',
         template: './inscripcion-confirmation',
         context: {
           userName,
           programaNombre: programData.nombre,
           programaDescripcion: programData.descripcion,
-          programaCosto: programData.costo.toLocaleString('es-CO', { style: 'currency', currency: 'COP' }),
           programaDuracion: programData.duracion,
           instituteNombre: instituteInfo.nombre,
           instituteDireccion: instituteInfo.direccion,

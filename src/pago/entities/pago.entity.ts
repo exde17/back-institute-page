@@ -1,4 +1,5 @@
 import { Inscripcion } from "src/inscripcion/entities/inscripcion.entity";
+import { Matricula } from "src/matricula/entities/matricula.entity";
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 export enum MetodoPago {
@@ -33,8 +34,8 @@ export class Pago {
   })
   metodo: MetodoPago;
 
-  @ManyToOne(() => Inscripcion, (inscripcion) => inscripcion.pagos)
-  inscripcion: Inscripcion;
+  @ManyToOne(() => Matricula, (matricula) => matricula.pagos)
+  matricula: Matricula;
 
     @Column('timestamptz', {
       name: 'created_at',

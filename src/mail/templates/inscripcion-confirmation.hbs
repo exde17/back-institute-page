@@ -48,11 +48,6 @@
             font-weight: bold;
             color: #555;
         }
-        .price {
-            font-size: 24px;
-            color: #4CAF50;
-            font-weight: bold;
-        }
         .footer {
             background-color: #333;
             color: white;
@@ -75,7 +70,11 @@
     <div class="content">
         <p>Hola <strong>{{userName}}</strong>,</p>
         
-        <p>¡Felicitaciones! Tu inscripción ha sido procesada exitosamente. A continuación, encontrarás los detalles de tu programa:</p>
+        <p>¡Felicitaciones! Tu pre-inscripción ha sido procesada exitosamente. A continuación, encontrarás los detalles de tu programa:</p>
+        
+        <p style="background-color: #d4edda; border: 1px solid #c3e6cb; padding: 15px; border-radius: 4px; color: #155724;">
+            <strong>⚠️ Importante:</strong> Para completar tu inscripción, debes acercarte al instituto con este comprobante. Allí te proporcionaremos toda la información necesaria para continuar con el proceso.
+        </p>
         
         <div class="info-box">
             <h3>📚 Información del Programa</h3>
@@ -87,10 +86,6 @@
             </div>
             <div class="info-item">
                 <span class="info-label">Duración:</span> {{programaDuracion}}
-            </div>
-            <div class="info-item">
-                <span class="info-label">Costo total:</span> 
-                <span class="price">{{programaCosto}}</span>
             </div>
         </div>
         
@@ -110,12 +105,15 @@
             </div>
         </div>
         
-        <p><strong>Próximos pasos:</strong></p>
-        <ul>
-            <li>Te contactaremos pronto para coordinar el inicio de tu programa</li>
-            <li>Puedes comunicarte con nosotros si tienes alguna pregunta</li>
-            <li>Mantén este correo como comprobante de tu inscripción</li>
-        </ul>
+        <div class="info-box" style="background-color: #fff3cd; border-left: 4px solid #ffc107;">
+            <h3 style="color: #856404;">📋 Próximos pasos:</h3>
+            <ul style="margin: 10px 0;">
+                <li><strong>Debes acercarte al instituto para continuar con el proceso de inscripción</strong></li>
+                <li>En el instituto te proporcionarán información detallada sobre costos y métodos de pago</li>
+                <li>Lleva este correo como comprobante de tu pre-inscripción</li>
+                <li>Si tienes alguna pregunta, puedes comunicarte con nosotros a través de los datos de contacto</li>
+            </ul>
+        </div>
         
         <p>¡Estamos emocionados de tenerte con nosotros!</p>
     </div>

@@ -1777,7 +1777,7 @@
           }
         },
         {
-          "name": "Get Matrícula by ID",
+          "name": "Get Matrícula by User ID (estudianteId)",
           "request": {
             "method": "GET",
             "header": [
@@ -1799,7 +1799,7 @@
           }
         },
         {
-          "name": "Update Matrícula",
+          "name": "Update Matrícula (por User ID)",
           "request": {
             "method": "PATCH",
             "header": [
@@ -1836,7 +1836,7 @@
           }
         },
         {
-          "name": "Delete Matrícula",
+          "name": "Delete Matrícula (por User ID)",
           "request": {
             "method": "DELETE",
             "header": [
