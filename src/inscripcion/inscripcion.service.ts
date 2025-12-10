@@ -115,7 +115,7 @@ export class InscripcionService {
   async findAll() {
     try {
       const inscripciones = await this.inscripcionRepository.find({
-        relations: ['user', 'programa', 'pagos'],
+        relations: ['user', 'programa', 'matriculas'],
       });
       return inscripciones;
     } catch (error) {
