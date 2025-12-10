@@ -29,14 +29,14 @@ export class MatriculaService {
 
   async findAll() {
     return await this.matriculaRepository.find({
-      relations: ['estudiante'],
+      relations: ['estudiante', 'inscripcion', 'inscripcion.programa'],
     });
   }
 
   async findOne(id: string) {
     const matricula = await this.matriculaRepository.findOne({
       where: { estudiante: { id } },
-      relations: ['estudiante'],
+      relations: ['estudiante', 'inscripcion', 'inscripcion.programa'],
     });
 
     if (!matricula) {
