@@ -23,6 +23,11 @@ export class InscripcionController {
     return this.inscripcionService.findAll();
   }
 
+  @Get('user/:userId')
+  findByUserId(@Param('userId') userId: string) {
+    return this.inscripcionService.findByUserId(userId);
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.inscripcionService.findOne(id);

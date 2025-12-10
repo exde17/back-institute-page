@@ -124,6 +124,19 @@ export class InscripcionService {
     }
   }
 
+  async findByUserId(userId: string) {
+    try {
+      const inscripciones = await this.inscripcionRepository.find({
+        where: { user: { id: userId } },
+        relations: ['user', 'programa', 'matriculas'],
+      });
+      return inscripciones;
+    } catch (error) {
+      console.error(error);
+      throw new HttpException('Error al obtener las inscripciones del usuario', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
   async findOne(id: string) {
     try {
       const inscripcion = await this.inscripcionRepository.findOne({ where: { id } });
