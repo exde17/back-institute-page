@@ -115,12 +115,25 @@ export class InscripcionService {
   async findAll() {
     try {
       const inscripciones = await this.inscripcionRepository.find({
-        relations: ['user', 'programa', 'pagos'],
+        relations: ['user', 'programa', 'matriculas'],
       });
       return inscripciones;
     } catch (error) {
       console.error(error);
       throw new Error('Error fetching inscripciones');
+    }
+  }
+
+  async findByUserId(userId: string) {
+    try {
+      const inscripciones = await this.inscripcionRepository.find({
+        where: { user: { id: userId } },
+        relations: ['user', 'programa', 'matriculas'],
+      });
+      return inscripciones;
+    } catch (error) {
+      console.error(error);
+      throw new HttpException('Error al obtener las inscripciones del usuario', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 

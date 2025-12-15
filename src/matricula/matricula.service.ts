@@ -17,6 +17,7 @@ export class MatriculaService {
   async create(createMatriculaDto: CreateMatriculaDto) {
     const matricula = this.matriculaRepository.create({
       estudiante: { id: createMatriculaDto.estudianteId } as any,
+      inscripcion: { id: createMatriculaDto.inscripcionId } as any,
       documentoEstudiante: createMatriculaDto.documentoEstudiante,
       diplomaCertificadoGrado10: createMatriculaDto.diplomaCertificadoGrado10,
       documentoAcudiente: createMatriculaDto.documentoAcudiente,
@@ -28,14 +29,14 @@ export class MatriculaService {
 
   async findAll() {
     return await this.matriculaRepository.find({
-      relations: ['estudiante'],
+      relations: ['estudiante', 'inscripcion', 'inscripcion.programa'],
     });
   }
 
   async findOne(id: string) {
     const matricula = await this.matriculaRepository.findOne({
       where: { estudiante: { id } },
-      relations: ['estudiante'],
+      relations: ['estudiante', 'inscripcion', 'inscripcion.programa'],
     });
 
     if (!matricula) {
