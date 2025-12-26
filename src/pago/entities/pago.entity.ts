@@ -1,6 +1,7 @@
+import { Factura } from "src/factura/entities/factura.entity";
 import { Inscripcion } from "src/inscripcion/entities/inscripcion.entity";
 import { Matricula } from "src/matricula/entities/matricula.entity";
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 export enum MetodoPago {
   TARJETA_CREDITO = 'Tarjeta de Crédito',
@@ -78,4 +79,7 @@ export class Pago {
         default: EstadoPago.PENDIENTE,
     })
     estado: EstadoPago;
+
+    @OneToMany(()=> Factura, (factura) => factura.pago)
+    facturas: Factura[];
 }

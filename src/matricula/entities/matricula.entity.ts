@@ -1,5 +1,7 @@
+import { Factura } from "src/factura/entities/factura.entity";
 import { Inscripcion } from "src/inscripcion/entities/inscripcion.entity";
 import { Pago } from "src/pago/entities/pago.entity";
+import { PlanPago } from "src/plan-pago/entities/plan-pago.entity";
 import { User } from "src/user/entities/user.entity";
 import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
@@ -59,4 +61,10 @@ export class Matricula {
 
   @ManyToOne(()=> Inscripcion, (inscripcion) => inscripcion.matriculas)
     inscripcion: Inscripcion;
+
+  @OneToMany(()=> PlanPago, (planPago) => planPago.matricula)
+    planPagos: PlanPago[];
+
+  @OneToMany(()=> Factura, (factura) => factura.matricula)
+    facturas: Factura[];
 }
