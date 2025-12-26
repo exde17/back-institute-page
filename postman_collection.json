@@ -1884,6 +1884,139 @@
           }
         }
       ]
+    },
+    {
+      "name": "Plan de Pago",
+      "item": [
+        {
+          "name": "Create Plan",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Plan Básico\",\n  \"descripcion\": \"Plan con 30% inicial y 3 cuotas\",\n  \"porcentajeInicial\": 30,\n  \"numeroCuotas\": 3,\n  \"diasEntreCuotas\": 30,\n  \"activo\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/plan-pago",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "plan-pago"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get All Plans",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/plan-pago",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "plan-pago"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Pago",
+      "item": [
+        {
+          "name": "Register Payment",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"matriculaId\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"monto\": 300.00,\n  \"fechaVencimiento\": \"2025-01-15\",\n  \"metodoPago\": \"transferencia\",\n  \"pagado\": true,\n  \"fechaPago\": \"2025-01-10\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/pago",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "pago"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get All Payments",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/pago",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "pago"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Payments by Matrícula",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/pago/matricula/550e8400-e29b-41d4-a716-446655440000",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "pago",
+                "matricula",
+                "550e8400-e29b-41d4-a716-446655440000"
+              ]
+            }
+          }
+        }
+      ]
     }
   ],
   "variable": [

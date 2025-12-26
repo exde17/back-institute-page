@@ -16,6 +16,8 @@ import { GruposModule } from './grupos/grupos.module';
 import { EstadoEstudianteModule } from './estado-estudiante/estado-estudiante.module';
 import { CategoriaEstudianteModule } from './categoria-estudiante/categoria-estudiante.module';
 import { MatriculaModule } from './matricula/matricula.module';
+import { PlanPagoModule } from './plan-pago/plan-pago.module';
+import { FacturaModule } from './factura/factura.module';
 
 
 @Module({
@@ -51,6 +53,8 @@ import { MatriculaModule } from './matricula/matricula.module';
     EstadoEstudianteModule,
     CategoriaEstudianteModule,
     MatriculaModule,
+    PlanPagoModule,
+    FacturaModule,
   ],
 })
 export class AppModule {}
