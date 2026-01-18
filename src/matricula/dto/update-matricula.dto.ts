@@ -1,6 +1,7 @@
 import { PartialType } from '@nestjs/mapped-types';
 import { CreateMatriculaDto } from './create-matricula.dto';
 import { IsBoolean, IsEnum, IsNumber, IsOptional, IsString, Min } from 'class-validator';
+import { Transform } from 'class-transformer';
 import { EstadoMatricula, TipoPago } from '../entities/matricula.entity';
 
 export class UpdateMatriculaDto extends PartialType(CreateMatriculaDto) {
@@ -17,12 +18,14 @@ export class UpdateTipoPagoDto {
   @IsOptional()
   planPagoId?: string;
 
+  @Transform(({ value }) => value !== undefined && value !== '' ? parseFloat(value) : undefined)
   @IsNumber()
   @Min(0)
   valorTotal: number;
 }
 
 export class UpdateBecadoDto {
+  @Transform(({ value }) => value === 'true' || value === true)
   @IsBoolean()
   esBecado: boolean;
 

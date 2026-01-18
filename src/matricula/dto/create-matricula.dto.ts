@@ -1,4 +1,5 @@
 import { IsString, IsNotEmpty, IsOptional, IsEnum, IsNumber, IsBoolean, Min } from "class-validator";
+import { Transform } from "class-transformer";
 import { TipoPago } from "../entities/matricula.entity";
 
 export class CreateMatriculaDto {
@@ -34,11 +35,13 @@ export class CreateMatriculaDto {
   @IsOptional()
   planPagoId?: string;
 
+  @Transform(({ value }) => value !== undefined && value !== '' ? parseFloat(value) : undefined)
   @IsNumber()
   @Min(0)
   @IsOptional()
   valorTotal?: number;
 
+  @Transform(({ value }) => value === 'true' || value === true)
   @IsBoolean()
   @IsOptional()
   esBecado?: boolean;
