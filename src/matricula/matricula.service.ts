@@ -8,6 +8,7 @@ import { UploadService } from 'src/utils/upload.service';
 import { CuotaService } from 'src/cuota/cuota.service';
 import { PlanPagoPredefinidoService } from 'src/plan-pago-predefinido/plan-pago-predefinido.service';
 import { EntidadService } from 'src/entidad/entidad.service';
+import { MailService } from 'src/mail/mail.service';
 import { Inscripcion } from 'src/inscripcion/entities/inscripcion.entity';
 
 @Injectable()
@@ -21,6 +22,7 @@ export class MatriculaService {
     private cuotaService: CuotaService,
     private planPagoPredefinidoService: PlanPagoPredefinidoService,
     private entidadService: EntidadService,
+    private mailService: MailService,
   ) {}
 
   async create(createMatriculaDto: CreateMatriculaDto) {
@@ -159,8 +161,12 @@ export class MatriculaService {
     return await this.matriculaRepository.save(matricula);
   }
 
-  async generarLinkPago(id: string, email: string, cuotaId?: string) {
+  async generarLinkPago(id: string, email: string, linkPago: string, montoParam?: number, cuotaId?: string) {
     const matricula = await this.findOneById(id);
+
+    // Get student name
+    const studentName = `${matricula.estudiante.firstName} ${matricula.estudiante.lastName}`;
+    const programName = matricula.inscripcion?.programa?.nombre || 'Programa';
 
     // Determine the email recipient
     let targetEmail = email;
@@ -168,16 +174,53 @@ export class MatriculaService {
       targetEmail = matricula.entidad.correo;
     }
 
-    // TODO: Integrate with Wompi API
-    // For now, return a placeholder
-    const linkId = `wompi_link_${Date.now()}`;
-    const url = `https://checkout.wompi.co/l/${linkId}`;
+    // Determine payment amount and concept
+    let monto: number;
+    let conceptoPago: string;
+    let numeroCuota: number | undefined;
+    let totalCuotas: number | undefined;
+
+    if (cuotaId) {
+      // Payment for a specific cuota
+      const cuota = await this.cuotaService.findOne(cuotaId);
+      if (!cuota) {
+        throw new NotFoundException(`Cuota con id ${cuotaId} no encontrada`);
+      }
+      monto = montoParam || Number(cuota.monto);
+      numeroCuota = cuota.numeroCuota;
+      totalCuotas = matricula.planPagoSeleccionado?.numeroCuotas || matricula.cuotas?.length || 0;
+      conceptoPago = `Cuota ${numeroCuota} de ${totalCuotas} - Matrícula`;
+    } else {
+      // Full payment (contado)
+      monto = montoParam || Number(matricula.valorTotal) || 0;
+      conceptoPago = 'Pago Total - Matrícula';
+    }
+
+    // Send email with payment link (provided by frontend)
+    const emailResult = await this.mailService.sendPagoLink(
+      targetEmail,
+      studentName,
+      {
+        programaNombre: programName,
+        conceptoPago,
+        monto,
+        linkPago,
+        numeroCuota,
+        totalCuotas,
+      }
+    );
 
     return {
-      url,
-      linkId,
+      success: emailResult.success,
+      url: linkPago,
       email: targetEmail,
-      monto: cuotaId ? undefined : matricula.valorTotal,
+      monto,
+      conceptoPago,
+      numeroCuota,
+      totalCuotas,
+      message: emailResult.success
+        ? `Link de pago enviado exitosamente a ${targetEmail}`
+        : 'Error al enviar el correo',
     };
   }
 

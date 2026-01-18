@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Link de Pago - FCM Institute</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .header {
+            background: linear-gradient(135deg, #d97706 0%, #f59e0b 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        .content {
+            padding: 30px;
+        }
+        .info-box {
+            background-color: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .info-box h3 {
+            margin-top: 0;
+            color: #92400e;
+        }
+        .info-item {
+            margin: 10px 0;
+            padding: 8px 0;
+            border-bottom: 1px solid #fde68a;
+        }
+        .info-item:last-child {
+            border-bottom: none;
+        }
+        .info-label {
+            font-weight: bold;
+            color: #78350f;
+        }
+        .amount-box {
+            background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+            color: white;
+            padding: 25px;
+            text-align: center;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+        .amount-box .label {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-bottom: 5px;
+        }
+        .amount-box .amount {
+            font-size: 36px;
+            font-weight: bold;
+        }
+        .pay-button {
+            display: block;
+            width: 100%;
+            background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+            color: white;
+            text-decoration: none;
+            padding: 18px 30px;
+            text-align: center;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            margin: 25px 0;
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+        }
+        .pay-button:hover {
+            background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 100%);
+        }
+        .notice {
+            background-color: #dbeafe;
+            border: 1px solid #93c5fd;
+            padding: 15px;
+            border-radius: 8px;
+            color: #1e40af;
+            margin: 20px 0;
+        }
+        .notice strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .footer {
+            background-color: #1f2937;
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+        .footer p {
+            margin: 5px 0;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Link de Pago</h1>
+            <p style="margin: 10px 0 0 0; opacity: 0.9;">FCM Institute</p>
+        </div>
+
+        <div class="content">
+            <p>Hola <strong>{{userName}}</strong>,</p>
+
+            <p>Para continuar con tu proceso académico en el programa <strong>{{programaNombre}}</strong>, es necesario que realices el siguiente pago:</p>
+
+            <div class="info-box">
+                <h3>Detalles del Pago</h3>
+                <div class="info-item">
+                    <span class="info-label">Programa:</span> {{programaNombre}}
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Concepto:</span> {{conceptoPago}}
+                </div>
+                {{#if numeroCuota}}
+                <div class="info-item">
+                    <span class="info-label">Cuota:</span> {{numeroCuota}} de {{totalCuotas}}
+                </div>
+                {{/if}}
+            </div>
+
+            <div class="amount-box">
+                <div class="label">Monto a pagar</div>
+                <div class="amount">${{monto}} COP</div>
+            </div>
+
+            <a href="{{linkPago}}" class="pay-button">
+                Realizar Pago Seguro
+            </a>
+
+            <div class="notice">
+                <strong>Importante:</strong>
+                No es necesario que nos notifiques una vez realizado el pago. Nuestro sistema detectará automáticamente tu transacción y actualizará tu estado de matrícula.
+            </div>
+
+            <p>Si tienes alguna pregunta sobre el proceso de pago, no dudes en contactarnos.</p>
+
+            <p>¡Gracias por confiar en nosotros para tu formación académica!</p>
+        </div>
+
+        <div class="footer">
+            <p><strong>{{instituteNombre}}</strong></p>
+            <p>{{instituteDireccion}} | {{instituteTelefono}}</p>
+            <p>{{instituteEmail}}</p>
+        </div>
+    </div>
+</body>
+</html>

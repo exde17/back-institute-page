@@ -41,4 +41,12 @@ export class GenerarLinkPagoDto {
   @IsString()
   @IsOptional()
   cuotaId?: string;
+
+  @IsString()
+  linkPago: string;
+
+  @Transform(({ value }) => value !== undefined && value !== '' ? parseFloat(value) : undefined)
+  @IsNumber()
+  @IsOptional()
+  monto?: number;
 }

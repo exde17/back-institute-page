@@ -11,6 +11,7 @@ import { Inscripcion } from 'src/inscripcion/entities/inscripcion.entity';
 import { CuotaModule } from 'src/cuota/cuota.module';
 import { PlanPagoPredefinidoModule } from 'src/plan-pago-predefinido/plan-pago-predefinido.module';
 import { EntidadModule } from 'src/entidad/entidad.module';
+import { MailModule } from 'src/mail/mail.module';
 
 @Module({
   controllers: [MatriculaController],
@@ -31,6 +32,7 @@ import { EntidadModule } from 'src/entidad/entidad.module';
     CuotaModule,
     PlanPagoPredefinidoModule,
     EntidadModule,
+    MailModule,
   ],
   exports: [MatriculaService],
 })

@@ -168,7 +168,13 @@ export class MatriculaController {
     @Param('id', ParseUUIDPipe) id: string,
     @Body() generarLinkPagoDto: GenerarLinkPagoDto,
   ) {
-    return this.matriculaService.generarLinkPago(id, generarLinkPagoDto.email, generarLinkPagoDto.cuotaId);
+    return this.matriculaService.generarLinkPago(
+      id,
+      generarLinkPagoDto.email,
+      generarLinkPagoDto.linkPago,
+      generarLinkPagoDto.monto,
+      generarLinkPagoDto.cuotaId,
+    );
   }
 
   @Get(':id/resumen-pago')
