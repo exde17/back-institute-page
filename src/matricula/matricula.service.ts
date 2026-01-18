@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, DeepPartial } from 'typeorm';
 import { CreateMatriculaDto } from './dto/create-matricula.dto';
 import { UpdateMatriculaDto, UpdateTipoPagoDto, UpdateBecadoDto } from './dto/update-matricula.dto';
 import { Matricula, TipoPago, EstadoMatricula } from './entities/matricula.entity';
@@ -24,7 +24,7 @@ export class MatriculaService {
   ) {}
 
   async create(createMatriculaDto: CreateMatriculaDto) {
-    const matriculaData: any = {
+    const matriculaData: DeepPartial<Matricula> = {
       estudiante: { id: createMatriculaDto.estudianteId },
       inscripcion: { id: createMatriculaDto.inscripcionId },
       documentoEstudiante: createMatriculaDto.documentoEstudiante,
@@ -45,7 +45,7 @@ export class MatriculaService {
     }
 
     const matricula = this.matriculaRepository.create(matriculaData);
-    const savedMatricula: Matricula = await this.matriculaRepository.save(matricula);
+    const savedMatricula = await this.matriculaRepository.save(matricula);
 
     // If payment type is CUOTAS and a plan is selected, create the installments
     if (createMatriculaDto.tipoPago === TipoPago.CUOTAS && createMatriculaDto.planPagoId && createMatriculaDto.valorTotal) {
