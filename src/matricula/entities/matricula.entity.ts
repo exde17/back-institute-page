@@ -1,9 +1,23 @@
+import { Cuota } from "src/cuota/entities/cuota.entity";
+import { Entidad } from "src/entidad/entities/entidad.entity";
 import { Factura } from "src/factura/entities/factura.entity";
 import { Inscripcion } from "src/inscripcion/entities/inscripcion.entity";
 import { Pago } from "src/pago/entities/pago.entity";
 import { PlanPago } from "src/plan-pago/entities/plan-pago.entity";
+import { PlanPagoPredefinido } from "src/plan-pago-predefinido/entities/plan-pago-predefinido.entity";
 import { User } from "src/user/entities/user.entity";
 import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+
+export enum TipoPago {
+  CONTADO = 'CONTADO',
+  CUOTAS = 'CUOTAS',
+}
+
+export enum EstadoMatricula {
+  PENDIENTE_PAGO = 'PENDIENTE_PAGO',
+  PAGO_PARCIAL = 'PAGO_PARCIAL',
+  PAGADO = 'PAGADO',
+}
 
 @Entity()
 export class Matricula {
@@ -41,6 +55,48 @@ export class Matricula {
     comment: 'Ruta del formulario de matricula'
   })
   formularioMatricula: string;
+
+  // Nuevos campos para pagos y becas
+  @Column({
+    type: 'enum',
+    enum: TipoPago,
+    nullable: true,
+    comment: 'Tipo de pago: contado o cuotas'
+  })
+  tipoPago: TipoPago;
+
+  @Column({
+    type: 'boolean',
+    default: false,
+    comment: 'Indica si el estudiante es becado'
+  })
+  esBecado: boolean;
+
+  @Column({
+    type: 'enum',
+    enum: EstadoMatricula,
+    default: EstadoMatricula.PENDIENTE_PAGO,
+    comment: 'Estado de pago de la matrícula'
+  })
+  estadoMatricula: EstadoMatricula;
+
+  @Column({
+    type: 'decimal',
+    precision: 12,
+    scale: 2,
+    nullable: true,
+    comment: 'Valor total a pagar'
+  })
+  valorTotal: number;
+
+  @ManyToOne(() => Entidad, (entidad) => entidad.matriculas, { nullable: true })
+  entidad: Entidad;
+
+  @ManyToOne(() => PlanPagoPredefinido, (plan) => plan.matriculas, { nullable: true })
+  planPagoSeleccionado: PlanPagoPredefinido;
+
+  @OneToMany(() => Cuota, (cuota) => cuota.matricula)
+  cuotas: Cuota[];
 
   @CreateDateColumn({
     type: 'timestamptz',

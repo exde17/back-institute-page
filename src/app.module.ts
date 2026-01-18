@@ -18,6 +18,9 @@ import { CategoriaEstudianteModule } from './categoria-estudiante/categoria-estu
 import { MatriculaModule } from './matricula/matricula.module';
 import { PlanPagoModule } from './plan-pago/plan-pago.module';
 import { FacturaModule } from './factura/factura.module';
+import { EntidadModule } from './entidad/entidad.module';
+import { CuotaModule } from './cuota/cuota.module';
+import { PlanPagoPredefinidoModule } from './plan-pago-predefinido/plan-pago-predefinido.module';
 
 
 @Module({
@@ -55,6 +58,9 @@ import { FacturaModule } from './factura/factura.module';
     MatriculaModule,
     PlanPagoModule,
     FacturaModule,
+    EntidadModule,
+    CuotaModule,
+    PlanPagoPredefinidoModule,
   ],
 })
 export class AppModule {}

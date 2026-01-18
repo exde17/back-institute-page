@@ -1,4 +1,5 @@
-import { IsString, IsNotEmpty, IsOptional } from "class-validator";
+import { IsString, IsNotEmpty, IsOptional, IsEnum, IsNumber, IsBoolean, Min } from "class-validator";
+import { TipoPago } from "../entities/matricula.entity";
 
 export class CreateMatriculaDto {
   @IsString()
@@ -24,4 +25,25 @@ export class CreateMatriculaDto {
   @IsString()
   @IsNotEmpty()
   inscripcionId: string;
+
+  @IsEnum(TipoPago)
+  @IsOptional()
+  tipoPago?: TipoPago;
+
+  @IsString()
+  @IsOptional()
+  planPagoId?: string;
+
+  @IsNumber()
+  @Min(0)
+  @IsOptional()
+  valorTotal?: number;
+
+  @IsBoolean()
+  @IsOptional()
+  esBecado?: boolean;
+
+  @IsString()
+  @IsOptional()
+  entidadId?: string;
 }

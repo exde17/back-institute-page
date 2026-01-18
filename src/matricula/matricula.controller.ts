@@ -10,11 +10,12 @@ import {
   UploadedFiles,
   BadRequestException,
   Res,
+  ParseUUIDPipe,
 } from '@nestjs/common';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { MatriculaService } from './matricula.service';
 import { CreateMatriculaDto } from './dto/create-matricula.dto';
-import { UpdateMatriculaDto } from './dto/update-matricula.dto';
+import { UpdateMatriculaDto, UpdateTipoPagoDto, UpdateBecadoDto, GenerarLinkPagoDto } from './dto/update-matricula.dto';
 import { UploadService } from 'src/utils/upload.service';
 import * as fs from 'fs';
 import * as path from 'path';
@@ -26,12 +27,12 @@ const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     const fieldName = file.fieldname;
     const destPath = path.join(process.cwd(), 'uploads/matriculas', fieldName);
-    
+
     // Crear directorio si no existe
     if (!fs.existsSync(destPath)) {
       fs.mkdirSync(destPath, { recursive: true });
     }
-    
+
     cb(null, destPath);
   },
   filename: (req, file, cb) => {
@@ -100,6 +101,11 @@ export class MatriculaController {
     return this.matriculaService.findOne(id);
   }
 
+  @Get('by-id/:id')
+  findOneById(@Param('id', ParseUUIDPipe) id: string) {
+    return this.matriculaService.findOneById(id);
+  }
+
   @Patch(':id')
   @UseInterceptors(
     FileFieldsInterceptor(
@@ -139,6 +145,40 @@ export class MatriculaController {
     }
 
     return this.matriculaService.update(id, updateMatriculaDto);
+  }
+
+  @Patch(':id/tipo-pago')
+  updateTipoPago(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() updateTipoPagoDto: UpdateTipoPagoDto,
+  ) {
+    return this.matriculaService.updateTipoPago(id, updateTipoPagoDto);
+  }
+
+  @Patch(':id/becado')
+  updateBecado(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() updateBecadoDto: UpdateBecadoDto,
+  ) {
+    return this.matriculaService.updateBecado(id, updateBecadoDto);
+  }
+
+  @Post(':id/generar-link')
+  generarLinkPago(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() generarLinkPagoDto: GenerarLinkPagoDto,
+  ) {
+    return this.matriculaService.generarLinkPago(id, generarLinkPagoDto.email, generarLinkPagoDto.cuotaId);
+  }
+
+  @Get(':id/resumen-pago')
+  getResumenPago(@Param('id', ParseUUIDPipe) id: string) {
+    return this.matriculaService.getResumenPago(id);
+  }
+
+  @Patch(':id/actualizar-estado')
+  updateEstadoMatricula(@Param('id', ParseUUIDPipe) id: string) {
+    return this.matriculaService.updateEstadoMatricula(id);
   }
 
   @Delete(':id')
