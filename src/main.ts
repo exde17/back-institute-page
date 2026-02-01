@@ -12,10 +12,10 @@ async function bootstrap() {
   app.use(require('express').urlencoded({ limit: '50mb', extended: true }));
   
   app.enableCors({
-    origin: true, // Permite cualquier origen (equivalente a * pero compatible con credentials)
-    credentials: true,
+    origin: '*', // Permite cualquier origen
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'X-Requested-With'],
+    credentials: false, // Debe ser false cuando origin es '*'
   });
   
   app.useGlobalFilters(new HttpExceptionFilter());
