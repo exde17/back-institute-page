@@ -61,6 +61,12 @@ export class CuotaService {
     return await this.cuotaRepository.save(cuota);
   }
 
+  async updateWompiLinkId(id: string, wompiLinkId: string): Promise<Cuota> {
+    const cuota = await this.findOne(id);
+    cuota.wompiLinkId = wompiLinkId;
+    return await this.cuotaRepository.save(cuota);
+  }
+
   async generarLinkPago(id: string, email: string): Promise<{ url: string; linkId: string }> {
     const cuota = await this.findOne(id);
 

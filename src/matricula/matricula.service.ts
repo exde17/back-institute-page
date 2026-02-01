@@ -161,7 +161,7 @@ export class MatriculaService {
     return await this.matriculaRepository.save(matricula);
   }
 
-  async generarLinkPago(id: string, email: string, linkPago: string, montoParam?: number, cuotaId?: string) {
+  async generarLinkPago(id: string, email: string, linkPago: string, montoParam?: number, cuotaId?: string, linkId?: string) {
     const matricula = await this.findOneById(id);
 
     // Get student name
@@ -190,10 +190,21 @@ export class MatriculaService {
       numeroCuota = cuota.numeroCuota;
       totalCuotas = matricula.planPagoSeleccionado?.numeroCuotas || matricula.cuotas?.length || 0;
       conceptoPago = `Cuota ${numeroCuota} de ${totalCuotas} - Matrícula`;
+
+      // Guardar el linkId de Wompi en la cuota para asociar en el webhook
+      if (linkId) {
+        await this.cuotaService.updateWompiLinkId(cuotaId, linkId);
+      }
     } else {
       // Full payment (contado)
       monto = montoParam || Number(matricula.valorTotal) || 0;
       conceptoPago = 'Pago Total - Matrícula';
+
+      // Guardar el linkId de Wompi en la matrícula para asociar en el webhook
+      if (linkId) {
+        matricula.wompiLinkId = linkId;
+        await this.matriculaRepository.save(matricula);
+      }
     }
 
     // Send email with payment link (provided by frontend)
