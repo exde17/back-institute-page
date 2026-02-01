@@ -71,45 +71,26 @@ export class PagoService {
       // Convertir el monto de centavos a pesos
       const montoEnPesos = transaction.amount_in_cents / 100;
 
-      // Parsear el SKU para identificar el tipo de pago y el ID
-      // Formato: "c:{uuid}" para cuota, "m:{uuid}" para matrícula, "i:{uuid}" para inscripción
-      // El UUID viene sin guiones para cumplir con el límite de 36 caracteres de Wompi
-      let tipoReferencia: 'cuota' | 'matricula' | 'inscripcion' | null = null;
-      let referenciaId: string | null = null;
-      const sku = transaction.sku;
-
-      if (sku) {
-        const [tipo, uuidSinGuiones] = sku.split(':');
-
-        // Mapear el prefijo corto al tipo completo
-        if (tipo === 'c') {
-          tipoReferencia = 'cuota';
-        } else if (tipo === 'm') {
-          tipoReferencia = 'matricula';
-        } else if (tipo === 'i') {
-          tipoReferencia = 'inscripcion';
-        }
-
-        // Reconstruir el UUID con guiones: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
-        if (uuidSinGuiones && uuidSinGuiones.length === 32) {
-          referenciaId = `${uuidSinGuiones.slice(0, 8)}-${uuidSinGuiones.slice(8, 12)}-${uuidSinGuiones.slice(12, 16)}-${uuidSinGuiones.slice(16, 20)}-${uuidSinGuiones.slice(20)}`;
-        }
-
-        this.logger.log(`SKU parseado: tipo=${tipoReferencia}, id=${referenciaId}`);
-      }
+      // Obtener el payment_link_id del webhook
+      // Este ID se guardó previamente en la cuota o matrícula cuando se generó el link
+      const paymentLinkId = transaction.payment_link_id;
+      this.logger.log(`Payment Link ID recibido: ${paymentLinkId}`);
 
       let matricula: Matricula | null = null;
+      let tipoReferencia: 'cuota' | 'matricula' | null = null;
 
-      // Procesar según el tipo de referencia del SKU
-      if (tipoReferencia === 'cuota' && referenciaId) {
-        // Buscar la cuota específica
+      // Buscar por payment_link_id en cuotas y matrículas
+      if (paymentLinkId) {
+        // Primero buscar en cuotas (pago a cuotas)
         const cuota = await this.cuotaRepository.findOne({
-          where: { id: referenciaId },
+          where: { wompiLinkId: paymentLinkId },
           relations: ['matricula'],
         });
 
         if (cuota) {
+          tipoReferencia = 'cuota';
           matricula = cuota.matricula;
+          this.logger.log(`Cuota encontrada: ${cuota.id} para matrícula ${matricula?.id}`);
 
           // Si el pago fue aprobado, actualizar la cuota
           if (estadoPago === EstadoPago.COMPLETADO) {
@@ -122,26 +103,33 @@ export class PagoService {
             this.logger.log(`Cuota ${cuota.id} marcada como pagada`);
 
             // Actualizar estado de la matrícula
-            await this.actualizarEstadoMatricula(cuota.matricula.id);
+            if (cuota.matricula?.id) {
+              await this.actualizarEstadoMatricula(cuota.matricula.id);
+            }
           }
         } else {
-          this.logger.warn(`Cuota con ID ${referenciaId} no encontrada`);
-        }
-      } else if (tipoReferencia === 'matricula' && referenciaId) {
-        // Buscar la matrícula directamente (pago de contado)
-        matricula = await this.matriculaRepository.findOne({
-          where: { id: referenciaId },
-        });
+          // Si no es cuota, buscar en matrículas (pago de contado)
+          matricula = await this.matriculaRepository.findOne({
+            where: { wompiLinkId: paymentLinkId },
+          });
 
-        if (matricula && estadoPago === EstadoPago.COMPLETADO) {
-          // Pago de contado aprobado - marcar matrícula como pagada
-          matricula.estadoMatricula = EstadoMatricula.PAGADO;
-          await this.matriculaRepository.save(matricula);
+          if (matricula) {
+            tipoReferencia = 'matricula';
+            this.logger.log(`Matrícula encontrada (pago contado): ${matricula.id}`);
 
-          this.logger.log(`Matrícula ${matricula.id} marcada como pagada (contado)`);
-        } else if (!matricula) {
-          this.logger.warn(`Matrícula con ID ${referenciaId} no encontrada`);
+            if (estadoPago === EstadoPago.COMPLETADO) {
+              // Pago de contado aprobado - marcar matrícula como pagada
+              matricula.estadoMatricula = EstadoMatricula.PAGADO;
+              await this.matriculaRepository.save(matricula);
+
+              this.logger.log(`Matrícula ${matricula.id} marcada como pagada (contado)`);
+            }
+          } else {
+            this.logger.warn(`No se encontró cuota ni matrícula con wompiLinkId: ${paymentLinkId}`);
+          }
         }
+      } else {
+        this.logger.warn('No se recibió payment_link_id en el webhook');
       }
 
       if (!pago) {
@@ -180,7 +168,7 @@ export class PagoService {
         message: 'Webhook procesado correctamente',
         pagoId: pago.id,
         tipoReferencia,
-        referenciaId,
+        paymentLinkId,
       };
     } catch (error) {
       this.logger.error(`Error procesando webhook de Wompi: ${error.message}`, error.stack);

@@ -49,4 +49,8 @@ export class GenerarLinkPagoDto {
   @IsNumber()
   @IsOptional()
   monto?: number;
+
+  @IsString()
+  @IsOptional()
+  linkId?: string;  // ID del link de pago de Wompi (payment_link_id)
 }
