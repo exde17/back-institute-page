@@ -7,11 +7,12 @@ import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Matricula } from 'src/matricula/entities/matricula.entity';
+import { Cuota } from 'src/cuota/entities/cuota.entity';
 
 @Module({
   controllers: [PagoController],
   providers: [PagoService],
-  imports: [TypeOrmModule.forFeature([Pago, Matricula]),
+  imports: [TypeOrmModule.forFeature([Pago, Matricula, Cuota]),
     PassportModule.register({ defaultStrategy: 'jwt' }),
         JwtModule.registerAsync({
           imports:[ConfigModule],

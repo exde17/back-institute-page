@@ -34,6 +34,9 @@ export class WompiWebhookDto {
       shipping_address: any;
       payment_source_id: string | null;
       payment_method_type: string;
+      // Campo SKU para identificar la cuota o matrícula
+      // Formato: "cuota:{cuotaId}" o "matricula:{matriculaId}"
+      sku?: string;
     };
   };
   event: string;
