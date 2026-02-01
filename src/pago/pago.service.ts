@@ -72,17 +72,29 @@ export class PagoService {
       const montoEnPesos = transaction.amount_in_cents / 100;
 
       // Parsear el SKU para identificar el tipo de pago y el ID
-      // Formato: "cuota:{cuotaId}" o "matricula:{matriculaId}"
-      let tipoReferencia: 'cuota' | 'matricula' | null = null;
+      // Formato: "c:{uuid}" para cuota, "m:{uuid}" para matrícula, "i:{uuid}" para inscripción
+      // El UUID viene sin guiones para cumplir con el límite de 36 caracteres de Wompi
+      let tipoReferencia: 'cuota' | 'matricula' | 'inscripcion' | null = null;
       let referenciaId: string | null = null;
       const sku = transaction.sku;
 
       if (sku) {
-        const [tipo, id] = sku.split(':');
-        if (tipo === 'cuota' || tipo === 'matricula') {
-          tipoReferencia = tipo;
-          referenciaId = id;
+        const [tipo, uuidSinGuiones] = sku.split(':');
+
+        // Mapear el prefijo corto al tipo completo
+        if (tipo === 'c') {
+          tipoReferencia = 'cuota';
+        } else if (tipo === 'm') {
+          tipoReferencia = 'matricula';
+        } else if (tipo === 'i') {
+          tipoReferencia = 'inscripcion';
         }
+
+        // Reconstruir el UUID con guiones: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+        if (uuidSinGuiones && uuidSinGuiones.length === 32) {
+          referenciaId = `${uuidSinGuiones.slice(0, 8)}-${uuidSinGuiones.slice(8, 12)}-${uuidSinGuiones.slice(12, 16)}-${uuidSinGuiones.slice(16, 20)}-${uuidSinGuiones.slice(20)}`;
+        }
+
         this.logger.log(`SKU parseado: tipo=${tipoReferencia}, id=${referenciaId}`);
       }
 
