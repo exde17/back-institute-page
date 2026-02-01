@@ -12,12 +12,7 @@ async function bootstrap() {
   app.use(require('express').urlencoded({ limit: '50mb', extended: true }));
   
   app.enableCors({
-    origin: [
-      'http://localhost:4321',
-      'http://localhost:4320',
-      'https://institute.bg3sas.com',
-      'https://www.institute.bg3sas.com',
-    ],
+    origin: '*',
     credentials: true,
   });
   
