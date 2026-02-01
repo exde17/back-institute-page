@@ -13,10 +13,9 @@ async function bootstrap() {
   
   app.enableCors({
     origin: [
-      'http://localhost:4321',
-      'http://localhost:4320',
-      'https://institute.bg3sas.com',
-      'https://www.institute.bg3sas.com',
+      '*',
+      'http://localhost:3000',
+      'http://localhost:4200',
     ],
     credentials: true,
   });
