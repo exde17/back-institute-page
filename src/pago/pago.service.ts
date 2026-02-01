@@ -108,21 +108,36 @@ export class PagoService {
             }
           }
         } else {
-          // Si no es cuota, buscar en matrículas (pago de contado)
+          // Si no es cuota, buscar en matrículas (pago de contado o beca)
           matricula = await this.matriculaRepository.findOne({
             where: { wompiLinkId: paymentLinkId },
+            relations: ['cuotas'],
           });
 
           if (matricula) {
             tipoReferencia = 'matricula';
-            this.logger.log(`Matrícula encontrada (pago contado): ${matricula.id}`);
+            this.logger.log(`Matrícula encontrada (pago total): ${matricula.id}, esBecado: ${matricula.esBecado}`);
 
             if (estadoPago === EstadoPago.COMPLETADO) {
-              // Pago de contado aprobado - marcar matrícula como pagada
+              // Pago total aprobado - marcar matrícula como pagada
               matricula.estadoMatricula = EstadoMatricula.PAGADO;
               await this.matriculaRepository.save(matricula);
 
-              this.logger.log(`Matrícula ${matricula.id} marcada como pagada (contado)`);
+              // Si la matrícula tiene cuotas (becado que eligió cuotas), marcar todas como pagadas
+              if (matricula.cuotas && matricula.cuotas.length > 0) {
+                for (const cuota of matricula.cuotas) {
+                  if (!cuota.pagado) {
+                    cuota.pagado = true;
+                    cuota.estado = EstadoCuota.PAGADO;
+                    cuota.fechaPago = transaction.finalized_at ? new Date(transaction.finalized_at) : new Date();
+                    cuota.wompiTransaccion = transaction.id;
+                    await this.cuotaRepository.save(cuota);
+                  }
+                }
+                this.logger.log(`Todas las cuotas (${matricula.cuotas.length}) marcadas como pagadas para matrícula ${matricula.id}`);
+              }
+
+              this.logger.log(`Matrícula ${matricula.id} marcada como pagada (pago total/beca)`);
             }
           } else {
             this.logger.warn(`No se encontró cuota ni matrícula con wompiLinkId: ${paymentLinkId}`);
