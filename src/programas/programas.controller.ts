@@ -15,13 +15,11 @@ export class ProgramasController {
   }
 
   @Get()
-  @Auth()
   findAll() {
     return this.programasService.findAll();
   }
 
   @Get(':id')
-  @Auth()
   findOne(@Param('id') id: string) {
     return this.programasService.findOne(id);
   }
