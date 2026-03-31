@@ -11,7 +11,7 @@ import {
   UseFilters,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { CreateUserDto, UpdateUserDto, LoginUserDto } from './dto';
+import { CreateUserDto, UpdateUserDto, LoginUserDto, ChangePasswordDto } from './dto';
 import { User } from './entities/user.entity';
 import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from './decorator/get-user.decorator';
@@ -84,6 +84,15 @@ export class UserController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.userService.findOne(+id);
+  }
+
+  @Patch('change-password/:id')
+  @Auth(ValidRoles.superUser, ValidRoles.admin, ValidRoles.user)
+  async changePassword(
+    @Param('id') id: string,
+    @Body() changePasswordDto: ChangePasswordDto,
+  ) {
+    return this.userService.changePassword(id, changePasswordDto);
   }
 
   @Patch(':id')
