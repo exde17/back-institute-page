@@ -82,7 +82,6 @@ export class UserController {
   }
 
   @Get(':id')
-  @Auth(ValidRoles.superUser, ValidRoles.admin, ValidRoles.user)
   findOne(@Param('id') id: string) {
     return this.userService.findOne(id);
   }
