@@ -9,9 +9,10 @@ import {
   UseGuards,
   SetMetadata,
   UseFilters,
+  Query,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { CreateUserDto, UpdateUserDto, LoginUserDto, ChangePasswordDto } from './dto';
+import { CreateUserDto, UpdateUserDto, LoginUserDto, ChangePasswordDto, UserFilterDto } from './dto';
 import { User } from './entities/user.entity';
 import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from './decorator/get-user.decorator';
@@ -60,8 +61,8 @@ export class UserController {
   // traer todos los usuarios, solo para admin y super-user
   @Get('users')
   @Auth(ValidRoles.superUser, ValidRoles.admin)
-  findAllUsers() {
-    return this.userService.findAll();
+  findAllUsers(@Query() filterDto: UserFilterDto) {
+    return this.userService.findAll(filterDto);
   }
 
 
