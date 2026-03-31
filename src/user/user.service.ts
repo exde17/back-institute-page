@@ -1,6 +1,6 @@
 import { HttpException, Injectable, UnauthorizedException } from '@nestjs/common';
 // import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto, LoginUserDto, CreateUserDto, ChangePasswordDto } from './dto';
+import { UpdateUserDto, LoginUserDto, CreateUserDto, ChangePasswordDto, UserFilterDto } from './dto';
 import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -107,18 +107,57 @@ export class UserService {
     }
   }
 
-  async findAll() {
+  async findAll(filterDto: UserFilterDto) {
     try {
-      const users = await this.userRepository.find({
-        select: ['email', 'id', 'firstName', 'lastName', 'role'],
-      });
-      return users;
-      
+      const { page = 1, limit = 10, search, role, email } = filterDto;
+      const skip = (page - 1) * limit;
+
+      const query = this.userRepository.createQueryBuilder('user');
+
+      // Aplicar búsqueda general
+      if (search) {
+        query.where(
+          'user.firstName ILIKE :search OR user.lastName ILIKE :search OR user.email ILIKE :search',
+          { search: `%${search}%` },
+        );
+      }
+
+      // Filtrar por rol
+      if (role) {
+        query.andWhere('user.role = :role', { role });
+      }
+
+      // Filtrar por email exacto
+      if (email) {
+        query.andWhere('user.email = :email', { email });
+      }
+
+      // Seleccionar campos específicos
+      query.select([
+        'user.id',
+        'user.email',
+        'user.firstName',
+        'user.lastName',
+        'user.role',
+      ]);
+
+      // Aplicar paginación
+      query.skip(skip).take(limit);
+
+      const [users, total] = await query.getManyAndCount();
+
+      return {
+        data: users,
+        pagination: {
+          total,
+          page,
+          limit,
+          pages: Math.ceil(total / limit),
+        },
+      };
     } catch (error) {
       throw error;
-      
     }
-    
   }
 
   findOne(id: number) {
