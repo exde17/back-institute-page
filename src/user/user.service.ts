@@ -1,6 +1,6 @@
 import { HttpException, Injectable, UnauthorizedException } from '@nestjs/common';
 // import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto, LoginUserDto, CreateUserDto } from './dto';
+import { UpdateUserDto, LoginUserDto, CreateUserDto, ChangePasswordDto } from './dto';
 import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -80,16 +80,74 @@ export class UserService {
     return token;
   }
 
+  async changePassword(userId: string, changePasswordDto: ChangePasswordDto) {
+    try {
+      const { newPassword } = changePasswordDto;
+
+      const user = await this.userRepository.findOne({
+        where: { id: userId },
+      });
+
+      if (!user) {
+        throw new UnauthorizedException('User not found');
+      }
+
+      const hashedPassword = await bcrypt.hashSync(newPassword, 10);
+
+      await this.userRepository.update(userId, {
+        password: hashedPassword,
+      });
+
+      return {
+        ok: true,
+        message: 'Password changed successfully',
+      };
+    } catch (error) {
+      throw error;
+    }
+  }
+
   findAll() {
     return `This action returns all user`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findOne(id: string) {
+    const user = await this.userRepository.findOne({
+      where: { id },
+      relations: [
+        'tipoDocumento',
+        'lugarExpedicion',
+        'municipioNacimiento',
+        'departamentoNacimiento',
+        'parentesco',
+        'nivelEducativo',
+        'departamentoInstitucion',
+        'municipioInstitucion',
+        'grupo',
+      ],
+    });
+
+    if (!user) {
+      throw new UnauthorizedException('User not found');
+    }
+
+    return { ...user, password: undefined };
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async update(id: string, updateUserDto: UpdateUserDto) {
+    const user = await this.userRepository.findOne({ where: { id } });
+
+    if (!user) {
+      throw new UnauthorizedException('User not found');
+    }
+
+    // Don't allow updating password through this endpoint
+    const { password, ...rest } = updateUserDto as any;
+
+    Object.assign(user, rest);
+    await this.userRepository.save(user);
+
+    return this.findOne(id);
   }
 
   remove(id: number) {
