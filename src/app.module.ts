@@ -39,7 +39,7 @@ import { PlanPagoPredefinidoModule } from './plan-pago-predefinido/plan-pago-pre
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
       autoLoadEntities: true,
-      synchronize: true,
+      synchronize: process.env.STAGE !== 'prod',
     }),
     UserModule,
     ProgramasModule,
