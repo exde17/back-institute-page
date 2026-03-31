@@ -57,6 +57,14 @@ export class UserController {
     };
   }
 
+  // traer todos los usuarios, solo para admin y super-user
+  @Get('users')
+  @Auth(ValidRoles.superUser, ValidRoles.admin)
+  findAllUsers() {
+    return this.userService.findAll();
+  }
+
+
   @Get('private')
   // @SetMetadata('roles', ['admin', 'super-user'])
   @RoleProtected(ValidRoles.admin, ValidRoles.superUser)
