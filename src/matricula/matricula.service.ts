@@ -64,14 +64,14 @@ export class MatriculaService {
 
   async findAll() {
     return await this.matriculaRepository.find({
-      relations: ['estudiante', 'inscripcion', 'inscripcion.programa', 'entidad', 'planPagoSeleccionado', 'cuotas'],
+      relations: ['estudiante', 'estudiante.tipoDocumento', 'inscripcion', 'inscripcion.programa', 'entidad', 'planPagoSeleccionado', 'cuotas'],
     });
   }
 
   async findOne(id: string) {
     const matricula = await this.matriculaRepository.findOne({
       where: { estudiante: { id } },
-      relations: ['estudiante', 'inscripcion', 'inscripcion.programa', 'entidad', 'planPagoSeleccionado', 'cuotas'],
+      relations: ['estudiante', 'estudiante.tipoDocumento', 'inscripcion', 'inscripcion.programa', 'entidad', 'planPagoSeleccionado', 'cuotas'],
     });
 
     if (!matricula) {
@@ -84,7 +84,7 @@ export class MatriculaService {
   async findOneById(id: string) {
     const matricula = await this.matriculaRepository.findOne({
       where: { id },
-      relations: ['estudiante', 'inscripcion', 'inscripcion.programa', 'entidad', 'planPagoSeleccionado', 'cuotas'],
+      relations: ['estudiante', 'estudiante.tipoDocumento', 'inscripcion', 'inscripcion.programa', 'entidad', 'planPagoSeleccionado', 'cuotas'],
     });
 
     if (!matricula) {
