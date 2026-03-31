@@ -82,8 +82,9 @@ export class UserController {
   }
 
   @Get(':id')
+  @Auth(ValidRoles.superUser, ValidRoles.admin, ValidRoles.user)
   findOne(@Param('id') id: string) {
-    return this.userService.findOne(+id);
+    return this.userService.findOne(id);
   }
 
   @Patch('change-password/:id')
@@ -96,8 +97,9 @@ export class UserController {
   }
 
   @Patch(':id')
+  @Auth(ValidRoles.superUser, ValidRoles.admin, ValidRoles.user)
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(+id, updateUserDto);
+    return this.userService.update(id, updateUserDto);
   }
 
   @Delete(':id')
