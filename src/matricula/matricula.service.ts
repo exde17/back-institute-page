@@ -95,7 +95,7 @@ export class MatriculaService {
   }
 
   async update(id: string, updateMatriculaDto: UpdateMatriculaDto) {
-    const matricula = await this.findOne(id);
+    const matricula = await this.findOneById(id);
 
     // Si hay nuevos archivos, eliminar los antiguos
     if (updateMatriculaDto.documentoEstudiante && matricula.documentoEstudiante) {
