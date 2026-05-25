@@ -12,6 +12,13 @@ async function bootstrap() {
   app.use(require('express').json({ limit: '50mb' }));
   app.use(require('express').urlencoded({ limit: '50mb', extended: true }));
   
+  app.enableCors({
+    origin: [
+      'http://localhost:4321',
+      'http://localhost:4320','https://fcminstitute.edu.co'
+    ],
+    credentials: true,
+  });
   app.enableCors(corsOptions);
   
   app.useGlobalFilters(new HttpExceptionFilter());
