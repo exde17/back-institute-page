@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { HttpExceptionFilter } from './utils/http-exception.filter';
+import { corsOptions } from './config/cors.config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -11,13 +12,7 @@ async function bootstrap() {
   app.use(require('express').json({ limit: '50mb' }));
   app.use(require('express').urlencoded({ limit: '50mb', extended: true }));
   
-  app.enableCors({
-    origin: [
-      'http://localhost:4321',
-      'http://localhost:4320'
-    ],
-    credentials: true,
-  });
+  app.enableCors(corsOptions);
   
   app.useGlobalFilters(new HttpExceptionFilter());
 
