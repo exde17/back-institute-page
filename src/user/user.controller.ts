@@ -12,7 +12,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { CreateUserDto, UpdateUserDto, LoginUserDto, ChangePasswordDto, UserFilterDto } from './dto';
+import { CreateUserDto, UpdateUserDto, LoginUserDto, ChangePasswordDto, UserFilterDto, UpdateUserStatusDto } from './dto';
 import { User } from './entities/user.entity';
 import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from './decorator/get-user.decorator';
@@ -60,7 +60,7 @@ export class UserController {
 
   // traer todos los usuarios, solo para admin y super-user
   @Get('users')
-  @Auth(ValidRoles.superUser, ValidRoles.admin)
+  // @Auth(ValidRoles.superUser, ValidRoles.admin)
   findAllUsers(@Query() filterDto: UserFilterDto) {
     return this.userService.findAll(filterDto);
   }
@@ -102,6 +102,15 @@ export class UserController {
     @Body() changePasswordDto: ChangePasswordDto,
   ) {
     return this.userService.changePassword(id, changePasswordDto);
+  }
+
+  @Patch('users/:id/status')
+  @Auth(ValidRoles.superUser, ValidRoles.admin)
+  updateUserStatus(
+    @Param('id') id: string,
+    @Body() updateUserStatusDto: UpdateUserStatusDto,
+  ) {
+    return this.userService.updateUserStatus(id, updateUserStatusDto);
   }
 
   @Patch(':id')
