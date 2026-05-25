@@ -1,6 +1,6 @@
-import { HttpException, Injectable, UnauthorizedException } from '@nestjs/common';
+import { HttpException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 // import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto, LoginUserDto, CreateUserDto, ChangePasswordDto, UserFilterDto } from './dto';
+import { UpdateUserDto, LoginUserDto, CreateUserDto, ChangePasswordDto, UserFilterDto, UpdateUserStatusDto } from './dto';
 import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -114,9 +114,11 @@ export class UserService {
 
       const query = this.userRepository.createQueryBuilder('user');
 
+      query.where('user.isActive = :isActive', { isActive: true });
+
       // Aplicar búsqueda general
       if (search) {
-        query.where(
+        query.andWhere(
           'user.firstName ILIKE :search OR user.lastName ILIKE :search OR user.email ILIKE :search',
           { search: `%${search}%` },
         );
@@ -139,6 +141,7 @@ export class UserService {
         'user.firstName',
         'user.lastName',
         'user.role',
+        'user.isActive',
       ]);
 
       // Aplicar paginación
@@ -181,6 +184,24 @@ export class UserService {
     }
 
     return { ...user, password: undefined };
+  }
+
+  async updateUserStatus(id: string, updateUserStatusDto: UpdateUserStatusDto) {
+    const { isActive } = updateUserStatusDto;
+
+    const result = await this.userRepository.update(id, { isActive });
+
+    if (!result.affected) {
+      throw new NotFoundException(`User with id ${id} not found`);
+    }
+
+    return {
+      ok: true,
+      message: isActive
+        ? 'User activated successfully'
+        : 'User deactivated successfully',
+      isActive,
+    };
   }
 
   async update(id: string, updateUserDto: UpdateUserDto) {
