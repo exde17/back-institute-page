@@ -40,7 +40,7 @@ export class UserController {
   }
 
   @Get()
-  // @UseGuards(AuthGuard(), UseRoleGuard)
+  @UseGuards(AuthGuard(), UseRoleGuard)
   @Auth(ValidRoles.superUser, ValidRoles.admin, ValidRoles.user)
   findAll(
     @GetUser() user: User,
