@@ -14,7 +14,7 @@ async function bootstrap() {
   app.enableCors({
     origin: [
       'http://localhost:4321',
-      'http://localhost:4320',
+      'http://localhost:4320','https://fcminstitute.edu.co'
     ],
     credentials: true,
   });
