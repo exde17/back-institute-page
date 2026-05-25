@@ -64,14 +64,14 @@ export class MatriculaService {
 
   async findAll() {
     return await this.matriculaRepository.find({
-      relations: ['estudiante', 'inscripcion', 'inscripcion.programa', 'entidad', 'planPagoSeleccionado', 'cuotas'],
+      relations: ['estudiante', 'estudiante.tipoDocumento', 'estudiante.departamentoNacimiento', 'estudiante.municipioNacimiento', 'estudiante.grupo', 'inscripcion', 'inscripcion.programa', 'entidad', 'planPagoSeleccionado', 'cuotas'],
     });
   }
 
   async findOne(id: string) {
     const matricula = await this.matriculaRepository.findOne({
       where: { estudiante: { id } },
-      relations: ['estudiante', 'inscripcion', 'inscripcion.programa', 'entidad', 'planPagoSeleccionado', 'cuotas'],
+      relations: ['estudiante', 'estudiante.tipoDocumento', 'estudiante.departamentoNacimiento', 'estudiante.municipioNacimiento', 'estudiante.grupo', 'inscripcion', 'inscripcion.programa', 'entidad', 'planPagoSeleccionado', 'cuotas'],
     });
 
     if (!matricula) {
@@ -84,7 +84,7 @@ export class MatriculaService {
   async findOneById(id: string) {
     const matricula = await this.matriculaRepository.findOne({
       where: { id },
-      relations: ['estudiante', 'inscripcion', 'inscripcion.programa', 'entidad', 'planPagoSeleccionado', 'cuotas'],
+      relations: ['estudiante', 'estudiante.tipoDocumento', 'estudiante.departamentoNacimiento', 'estudiante.municipioNacimiento', 'estudiante.grupo', 'inscripcion', 'inscripcion.programa', 'entidad', 'planPagoSeleccionado', 'cuotas'],
     });
 
     if (!matricula) {
@@ -95,7 +95,7 @@ export class MatriculaService {
   }
 
   async update(id: string, updateMatriculaDto: UpdateMatriculaDto) {
-    const matricula = await this.findOne(id);
+    const matricula = await this.findOneById(id);
 
     // Si hay nuevos archivos, eliminar los antiguos
     if (updateMatriculaDto.documentoEstudiante && matricula.documentoEstudiante) {

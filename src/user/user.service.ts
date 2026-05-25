@@ -163,8 +163,27 @@ export class UserService {
     }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findOne(id: string) {
+    const user = await this.userRepository.findOne({
+      where: { id },
+      relations: [
+        'tipoDocumento',
+        'lugarExpedicion',
+        'municipioNacimiento',
+        'departamentoNacimiento',
+        'parentesco',
+        'nivelEducativo',
+        'departamentoInstitucion',
+        'municipioInstitucion',
+        'grupo',
+      ],
+    });
+
+    if (!user) {
+      throw new UnauthorizedException('User not found');
+    }
+
+    return { ...user, password: undefined };
   }
 
   async updateUserStatus(id: string, updateUserStatusDto: UpdateUserStatusDto) {
@@ -185,8 +204,20 @@ export class UserService {
     };
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async update(id: string, updateUserDto: UpdateUserDto) {
+    const user = await this.userRepository.findOne({ where: { id } });
+
+    if (!user) {
+      throw new UnauthorizedException('User not found');
+    }
+
+    // Don't allow updating password through this endpoint
+    const { password, ...rest } = updateUserDto as any;
+
+    Object.assign(user, rest);
+    await this.userRepository.save(user);
+
+    return this.findOne(id);
   }
 
   remove(id: number) {
