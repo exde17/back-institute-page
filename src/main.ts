@@ -19,7 +19,7 @@ async function bootstrap() {
     ],
     credentials: true,
   });
-  app.enableCors(corsOptions);
+  // app.enableCors(corsOptions);
   
   app.useGlobalFilters(new HttpExceptionFilter());
 
