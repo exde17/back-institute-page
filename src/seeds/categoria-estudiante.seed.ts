@@ -13,7 +13,7 @@ export const categoriaEstudianteSeed: Omit<CategoriaEstudiante, 'id'>[] = [
   },
   {
     nombre: 'Normal',
-    descripcion: 'Estudiante que no recibe ninguna beca.',
+    descripcion: 'Estudiante que no recibe ninguna beca esta.',
     users: [],
   },
 ];
