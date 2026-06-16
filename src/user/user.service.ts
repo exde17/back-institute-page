@@ -114,19 +114,17 @@ export class UserService {
 
       const query = this.userRepository.createQueryBuilder('user');
 
-      query.where('user.isActive = :isActive', { isActive: true });
-
       // Aplicar búsqueda general
       if (search) {
-        query.andWhere(
-          'user.firstName ILIKE :search OR user.lastName ILIKE :search OR user.email ILIKE :search',
+        query.where(
+          '(user.firstName ILIKE :search OR user.lastName ILIKE :search OR user.email ILIKE :search)',
           { search: `%${search}%` },
         );
       }
 
-      // Filtrar por rol
+      // Filtrar por rol — role es text[] en PostgreSQL, se usa ANY()
       if (role) {
-        query.andWhere('user.role = :role', { role });
+        query.andWhere(':role = ANY(user.role)', { role });
       }
 
       // Filtrar por email exacto
