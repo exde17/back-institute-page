@@ -9,9 +9,10 @@ import {
   UseGuards,
   SetMetadata,
   UseFilters,
+  Query,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { CreateUserDto, UpdateUserDto, LoginUserDto } from './dto';
+import { CreateUserDto, UpdateUserDto, LoginUserDto, ChangePasswordDto, UserFilterDto, UpdateUserStatusDto } from './dto';
 import { User } from './entities/user.entity';
 import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from './decorator/get-user.decorator';
@@ -39,7 +40,7 @@ export class UserController {
   }
 
   @Get()
-  // @UseGuards(AuthGuard(), UseRoleGuard)
+  @UseGuards(AuthGuard(), UseRoleGuard)
   @Auth(ValidRoles.superUser, ValidRoles.admin, ValidRoles.user)
   findAll(
     @GetUser() user: User,
@@ -56,6 +57,14 @@ export class UserController {
       validRoles: user.role,
     };
   }
+
+  // traer todos los usuarios, solo para admin y super-user
+  @Get('users')
+  // @Auth(ValidRoles.superUser, ValidRoles.admin)
+  findAllUsers(@Query() filterDto: UserFilterDto) {
+    return this.userService.findAll(filterDto);
+  }
+
 
   @Get('private')
   // @SetMetadata('roles', ['admin', 'super-user'])
@@ -83,12 +92,31 @@ export class UserController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.userService.findOne(+id);
+    return this.userService.findOne(id);
+  }
+
+  @Patch('change-password/:id')
+  @Auth(ValidRoles.superUser, ValidRoles.admin, ValidRoles.user)
+  async changePassword(
+    @Param('id') id: string,
+    @Body() changePasswordDto: ChangePasswordDto,
+  ) {
+    return this.userService.changePassword(id, changePasswordDto);
+  }
+
+  @Patch('users/:id/status')
+  @Auth(ValidRoles.superUser, ValidRoles.admin)
+  updateUserStatus(
+    @Param('id') id: string,
+    @Body() updateUserStatusDto: UpdateUserStatusDto,
+  ) {
+    return this.userService.updateUserStatus(id, updateUserStatusDto);
   }
 
   @Patch(':id')
+  @Auth(ValidRoles.superUser, ValidRoles.admin, ValidRoles.user)
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(+id, updateUserDto);
+    return this.userService.update(id, updateUserDto);
   }
 
   @Delete(':id')

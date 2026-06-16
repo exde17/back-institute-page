@@ -174,6 +174,7 @@ export class MatriculaController {
       generarLinkPagoDto.linkPago,
       generarLinkPagoDto.monto,
       generarLinkPagoDto.cuotaId,
+      generarLinkPagoDto.linkId,
     );
   }
 

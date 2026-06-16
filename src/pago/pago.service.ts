@@ -5,7 +5,8 @@ import { CreatePagoDto } from './dto/create-pago.dto';
 import { UpdatePagoDto } from './dto/update-pago.dto';
 import { WompiWebhookDto } from './dto/wompi-webhook.dto';
 import { Pago, EstadoPago, MetodoPago } from './entities/pago.entity';
-import { Matricula } from 'src/matricula/entities/matricula.entity';
+import { Matricula, EstadoMatricula } from 'src/matricula/entities/matricula.entity';
+import { Cuota, EstadoCuota } from 'src/cuota/entities/cuota.entity';
 
 @Injectable()
 export class PagoService {
@@ -16,6 +17,8 @@ export class PagoService {
     private readonly pagoRepository: Repository<Pago>,
     @InjectRepository(Matricula)
     private readonly matriculaRepository: Repository<Matricula>,
+    @InjectRepository(Cuota)
+    private readonly cuotaRepository: Repository<Cuota>,
   ) {}
 
   create(createPagoDto: CreatePagoDto) {
@@ -68,16 +71,84 @@ export class PagoService {
       // Convertir el monto de centavos a pesos
       const montoEnPesos = transaction.amount_in_cents / 100;
 
+      // Obtener el payment_link_id del webhook
+      // Este ID se guardó previamente en la cuota o matrícula cuando se generó el link
+      const paymentLinkId = transaction.payment_link_id;
+      this.logger.log(`Payment Link ID recibido: ${paymentLinkId}`);
+
+      let matricula: Matricula | null = null;
+      let tipoReferencia: 'cuota' | 'matricula' | null = null;
+
+      // Buscar por payment_link_id en cuotas y matrículas
+      if (paymentLinkId) {
+        // Primero buscar en cuotas (pago a cuotas)
+        const cuota = await this.cuotaRepository.findOne({
+          where: { wompiLinkId: paymentLinkId },
+          relations: ['matricula'],
+        });
+
+        if (cuota) {
+          tipoReferencia = 'cuota';
+          matricula = cuota.matricula;
+          this.logger.log(`Cuota encontrada: ${cuota.id} para matrícula ${matricula?.id}`);
+
+          // Si el pago fue aprobado, actualizar la cuota
+          if (estadoPago === EstadoPago.COMPLETADO) {
+            cuota.pagado = true;
+            cuota.estado = EstadoCuota.PAGADO;
+            cuota.fechaPago = transaction.finalized_at ? new Date(transaction.finalized_at) : new Date();
+            cuota.wompiTransaccion = transaction.id;
+            await this.cuotaRepository.save(cuota);
+
+            this.logger.log(`Cuota ${cuota.id} marcada como pagada`);
+
+            // Actualizar estado de la matrícula
+            if (cuota.matricula?.id) {
+              await this.actualizarEstadoMatricula(cuota.matricula.id);
+            }
+          }
+        } else {
+          // Si no es cuota, buscar en matrículas (pago de contado o beca)
+          matricula = await this.matriculaRepository.findOne({
+            where: { wompiLinkId: paymentLinkId },
+            relations: ['cuotas'],
+          });
+
+          if (matricula) {
+            tipoReferencia = 'matricula';
+            this.logger.log(`Matrícula encontrada (pago total): ${matricula.id}, esBecado: ${matricula.esBecado}`);
+
+            if (estadoPago === EstadoPago.COMPLETADO) {
+              // Pago total aprobado - marcar matrícula como pagada
+              matricula.estadoMatricula = EstadoMatricula.PAGADO;
+              await this.matriculaRepository.save(matricula);
+
+              // Si la matrícula tiene cuotas (becado que eligió cuotas), marcar todas como pagadas
+              if (matricula.cuotas && matricula.cuotas.length > 0) {
+                for (const cuota of matricula.cuotas) {
+                  if (!cuota.pagado) {
+                    cuota.pagado = true;
+                    cuota.estado = EstadoCuota.PAGADO;
+                    cuota.fechaPago = transaction.finalized_at ? new Date(transaction.finalized_at) : new Date();
+                    cuota.wompiTransaccion = transaction.id;
+                    await this.cuotaRepository.save(cuota);
+                  }
+                }
+                this.logger.log(`Todas las cuotas (${matricula.cuotas.length}) marcadas como pagadas para matrícula ${matricula.id}`);
+              }
+
+              this.logger.log(`Matrícula ${matricula.id} marcada como pagada (pago total/beca)`);
+            }
+          } else {
+            this.logger.warn(`No se encontró cuota ni matrícula con wompiLinkId: ${paymentLinkId}`);
+          }
+        }
+      } else {
+        this.logger.warn('No se recibió payment_link_id en el webhook');
+      }
+
       if (!pago) {
         // Si no existe, crear un nuevo pago
-        // Intentar encontrar la matrícula por la referencia
-        let matricula: Matricula | null = null;
-
-        // La referencia podría contener información sobre la matrícula
-        // Aquí deberías implementar tu lógica para encontrar la matrícula
-        // Por ejemplo, si la referencia contiene el ID de la matrícula
-        // matricula = await this.matriculaRepository.findOne({ where: { ... } });
-
         pago = this.pagoRepository.create({
           wompi_transaccion: transaction.id,
           referenciaPago: transaction.reference,
@@ -96,6 +167,10 @@ export class PagoService {
         pago.fechaPago = transaction.finalized_at ? new Date(transaction.finalized_at) : pago.fechaPago;
         pago.raw_response = JSON.stringify(webhookData);
         pago.updatedAt = new Date();
+        // Si no tenía matrícula asociada, asociarla ahora
+        if (!pago.matricula && matricula) {
+          pago.matricula = matricula;
+        }
       }
 
       // Guardar el pago
@@ -107,11 +182,45 @@ export class PagoService {
         success: true,
         message: 'Webhook procesado correctamente',
         pagoId: pago.id,
+        tipoReferencia,
+        paymentLinkId,
       };
     } catch (error) {
       this.logger.error(`Error procesando webhook de Wompi: ${error.message}`, error.stack);
       throw error;
     }
+  }
+
+  /**
+   * Actualiza el estado de una matrícula basándose en el estado de sus cuotas
+   */
+  private async actualizarEstadoMatricula(matriculaId: string): Promise<void> {
+    const matricula = await this.matriculaRepository.findOne({
+      where: { id: matriculaId },
+      relations: ['cuotas'],
+    });
+
+    if (!matricula) {
+      this.logger.warn(`Matrícula ${matriculaId} no encontrada para actualizar estado`);
+      return;
+    }
+
+    const totalCuotas = matricula.cuotas.length;
+    const cuotasPagadas = matricula.cuotas.filter(c => c.pagado).length;
+
+    if (totalCuotas === 0) {
+      return;
+    }
+
+    if (cuotasPagadas === totalCuotas) {
+      matricula.estadoMatricula = EstadoMatricula.PAGADO;
+      this.logger.log(`Matrícula ${matriculaId} actualizada a PAGADO (${cuotasPagadas}/${totalCuotas} cuotas)`);
+    } else if (cuotasPagadas > 0) {
+      matricula.estadoMatricula = EstadoMatricula.PAGO_PARCIAL;
+      this.logger.log(`Matrícula ${matriculaId} actualizada a PAGO_PARCIAL (${cuotasPagadas}/${totalCuotas} cuotas)`);
+    }
+
+    await this.matriculaRepository.save(matricula);
   }
 
   findAll() {

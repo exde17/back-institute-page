@@ -89,6 +89,14 @@ export class Matricula {
   })
   valorTotal: number;
 
+  @Column({
+    type: 'varchar',
+    length: 255,
+    nullable: true,
+    comment: 'ID del link de pago generado en Wompi (para pago de contado)'
+  })
+  wompiLinkId: string;
+
   @ManyToOne(() => Entidad, (entidad) => entidad.matriculas, { nullable: true })
   entidad: Entidad;
 

@@ -64,14 +64,14 @@ export class MatriculaService {
 
   async findAll() {
     return await this.matriculaRepository.find({
-      relations: ['estudiante', 'inscripcion', 'inscripcion.programa', 'entidad', 'planPagoSeleccionado', 'cuotas'],
+      relations: ['estudiante', 'estudiante.tipoDocumento', 'estudiante.departamentoNacimiento', 'estudiante.municipioNacimiento', 'estudiante.grupo', 'inscripcion', 'inscripcion.programa', 'entidad', 'planPagoSeleccionado', 'cuotas'],
     });
   }
 
   async findOne(id: string) {
     const matricula = await this.matriculaRepository.findOne({
       where: { estudiante: { id } },
-      relations: ['estudiante', 'inscripcion', 'inscripcion.programa', 'entidad', 'planPagoSeleccionado', 'cuotas'],
+      relations: ['estudiante', 'estudiante.tipoDocumento', 'estudiante.departamentoNacimiento', 'estudiante.municipioNacimiento', 'estudiante.grupo', 'inscripcion', 'inscripcion.programa', 'entidad', 'planPagoSeleccionado', 'cuotas'],
     });
 
     if (!matricula) {
@@ -84,7 +84,7 @@ export class MatriculaService {
   async findOneById(id: string) {
     const matricula = await this.matriculaRepository.findOne({
       where: { id },
-      relations: ['estudiante', 'inscripcion', 'inscripcion.programa', 'entidad', 'planPagoSeleccionado', 'cuotas'],
+      relations: ['estudiante', 'estudiante.tipoDocumento', 'estudiante.departamentoNacimiento', 'estudiante.municipioNacimiento', 'estudiante.grupo', 'inscripcion', 'inscripcion.programa', 'entidad', 'planPagoSeleccionado', 'cuotas'],
     });
 
     if (!matricula) {
@@ -95,7 +95,7 @@ export class MatriculaService {
   }
 
   async update(id: string, updateMatriculaDto: UpdateMatriculaDto) {
-    const matricula = await this.findOne(id);
+    const matricula = await this.findOneById(id);
 
     // Si hay nuevos archivos, eliminar los antiguos
     if (updateMatriculaDto.documentoEstudiante && matricula.documentoEstudiante) {
@@ -161,7 +161,7 @@ export class MatriculaService {
     return await this.matriculaRepository.save(matricula);
   }
 
-  async generarLinkPago(id: string, email: string, linkPago: string, montoParam?: number, cuotaId?: string) {
+  async generarLinkPago(id: string, email: string, linkPago: string, montoParam?: number, cuotaId?: string, linkId?: string) {
     const matricula = await this.findOneById(id);
 
     // Get student name
@@ -190,10 +190,21 @@ export class MatriculaService {
       numeroCuota = cuota.numeroCuota;
       totalCuotas = matricula.planPagoSeleccionado?.numeroCuotas || matricula.cuotas?.length || 0;
       conceptoPago = `Cuota ${numeroCuota} de ${totalCuotas} - Matrícula`;
+
+      // Guardar el linkId de Wompi en la cuota para asociar en el webhook
+      if (linkId) {
+        await this.cuotaService.updateWompiLinkId(cuotaId, linkId);
+      }
     } else {
       // Full payment (contado)
       monto = montoParam || Number(matricula.valorTotal) || 0;
       conceptoPago = 'Pago Total - Matrícula';
+
+      // Guardar el linkId de Wompi en la matrícula para asociar en el webhook
+      if (linkId) {
+        matricula.wompiLinkId = linkId;
+        await this.matriculaRepository.save(matricula);
+      }
     }
 
     // Send email with payment link (provided by frontend)
