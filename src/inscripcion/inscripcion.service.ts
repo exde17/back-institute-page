@@ -168,6 +168,35 @@ export class InscripcionService {
     }
   }
 
+  async updatePrograma(id: string, programaId: string) {
+    const inscripcion = await this.inscripcionRepository.findOne({
+      where: { id },
+      relations: ['programa'],
+    });
+
+    if (!inscripcion) {
+      throw new HttpException('Inscripción no encontrada', HttpStatus.NOT_FOUND);
+    }
+
+    const programa = await this.programaRepository.findOne({
+      where: { id: programaId },
+    });
+
+    if (!programa) {
+      throw new HttpException('Programa no encontrado', HttpStatus.NOT_FOUND);
+    }
+
+    await this.inscripcionRepository.update(id, {
+      programa: { id: programaId },
+    });
+
+    return {
+      message: 'Programa de inscripción actualizado exitosamente',
+      programaAnterior: inscripcion.programa?.nombre ?? null,
+      programaNuevo: programa.nombre,
+    };
+  }
+
   async remove(id: string) {
     try {
       await this.inscripcionRepository.delete(id);

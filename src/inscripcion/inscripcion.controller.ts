@@ -1,9 +1,11 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseUUIDPipe } from '@nestjs/common';
 import { InscripcionService } from './inscripcion.service';
 import { CreateInscripcionDto } from './dto/create-inscripcion.dto';
 import { UpdateInscripcionDto } from './dto/update-inscripcion.dto';
+import { UpdateProgramaInscripcionDto } from './dto/update-programa-inscripcion.dto';
 import { Auth, GetUser } from 'src/user/decorator';
 import { User } from 'src/user/entities/user.entity';
+import { ValidRoles } from 'src/user/interfaces';
 
 @Controller('inscripcion')
 export class InscripcionController {
@@ -31,6 +33,15 @@ export class InscripcionController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.inscripcionService.findOne(id);
+  }
+
+  @Patch(':id/programa')
+  @Auth(ValidRoles.superUser, ValidRoles.admin)
+  updatePrograma(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() updateProgramaDto: UpdateProgramaInscripcionDto,
+  ) {
+    return this.inscripcionService.updatePrograma(id, updateProgramaDto.programaId);
   }
 
   @Patch(':id')
