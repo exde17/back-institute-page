@@ -1,4 +1,4 @@
-import { HttpException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { ForbiddenException, HttpException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 // import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto, LoginUserDto, CreateUserDto, ChangePasswordDto, UserFilterDto, UpdateUserStatusDto } from './dto';
 import { User } from './entities/user.entity';
@@ -6,6 +6,7 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
 import { JwtPayload } from './interfaces/jwt-payload.interface';
+import { ValidRoles } from './interfaces/valid-roles';
 import { JwtService } from '@nestjs/jwt';
 import { HttpExceptionFilter } from 'src/utils/http-exception.filter';
 
@@ -80,7 +81,7 @@ export class UserService {
     return token;
   }
 
-  async changePassword(userId: string, changePasswordDto: ChangePasswordDto) {
+  async changePassword(userId: string, changePasswordDto: ChangePasswordDto, requestingUser?: User) {
     try {
       const { newPassword } = changePasswordDto;
 
@@ -90,6 +91,25 @@ export class UserService {
 
       if (!user) {
         throw new UnauthorizedException('User not found');
+      }
+
+      // Un docente solo puede cambiar la contraseña de estudiantes, no la de otros
+      // docentes, admins o super-users.
+      const isDocente = requestingUser?.role?.includes(ValidRoles.docente);
+      const isPrivileged = requestingUser?.role?.some((role) =>
+        [ValidRoles.admin, ValidRoles.superUser].includes(role as ValidRoles),
+      );
+
+      if (isDocente && !isPrivileged) {
+        const targetIsStudent = user.role?.every(
+          (role) => role === ValidRoles.user,
+        );
+
+        if (!targetIsStudent) {
+          throw new ForbiddenException(
+            'A docente only can change the password of students',
+          );
+        }
       }
 
       const hashedPassword = await bcrypt.hashSync(newPassword, 10);

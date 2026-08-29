@@ -96,12 +96,13 @@ export class UserController {
   }
 
   @Patch('change-password/:id')
-  @Auth(ValidRoles.superUser, ValidRoles.admin, ValidRoles.user)
+  @Auth(ValidRoles.superUser, ValidRoles.admin, ValidRoles.user, ValidRoles.docente)
   async changePassword(
     @Param('id') id: string,
     @Body() changePasswordDto: ChangePasswordDto,
+    @GetUser() requestingUser: User,
   ) {
-    return this.userService.changePassword(id, changePasswordDto);
+    return this.userService.changePassword(id, changePasswordDto, requestingUser);
   }
 
   @Patch('users/:id/status')
